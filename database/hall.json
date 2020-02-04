@@ -76,7 +76,7 @@
     },
     {
         "name": "B",
-        "rows": [ {"row":[
+        "rows": [  {"row":[
                             {"isEmpty":"true"},
                             {"isEmpty":"true"},
                             {"isEmpty":"true"},
@@ -119,5 +119,5 @@
                     
                 ],
         "prizeForSeats": 20
-        }
+    }
 ]

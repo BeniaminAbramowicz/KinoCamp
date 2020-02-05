@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// schemat filmu
 const movieSchema = new mongoose.Schema({
     title: String,
     genre: String,
@@ -7,7 +8,7 @@ const movieSchema = new mongoose.Schema({
     director:String,
     ageRestriction: Number
 });
-
+//schemat sali kinowej
 const cinemaHallSchema = new mongoose.Schema({
     name:String,
     rows:[{ 
@@ -17,13 +18,14 @@ const cinemaHallSchema = new mongoose.Schema({
     }],
     prizeForSeats:Number
 });
-
+//schemat seansu
 const screeningSchema = new mongoose.Schema({
     cinemaHallId: mongoose.Schema.Types.ObjectId,
     movieId: mongoose.Schema.Types.ObjectId,
     date: Date
 });
 
+// tworzenie modeli na podstawie odpowiednich schematów
 const Movie = mongoose.model('Movie', movieSchema);
 const CinemaHall = mongoose.model('Hall', cinemaHallSchema);
 const Screening = mongoose.model('Screening', screeningSchema);

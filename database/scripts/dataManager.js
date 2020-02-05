@@ -5,17 +5,21 @@ mongoose.connect('mongodb://localhost/KinoCamp')
 .then(()=> console.log('Ceonnected succesfully'))
 .catch(err => console.error('Could not connect to MongoDB', err));
 
+// pobieranie id filmow z bazy danych
 async function getMoviesId(){
     const movies = await Model.Movie.find()
     .select({_id_: 1});
     return movies;
 }
+
+//pobieranie id sal kinowych z bazy danych
 async function getCinemaHallsId(){
     cinemaHalls = await Model.CinemaHall.find()
     .select({_id :1});
     return cinemaHalls;
 }
 
+// zapisywanie seansu
 async function saveScreening(cinemaHallId,movieId,screeningDate){
     const screening = new Model.Screening({
         cinemaHallId: cinemaHallId,
@@ -26,6 +30,7 @@ async function saveScreening(cinemaHallId,movieId,screeningDate){
     console.log(result);
 }
 
+//zapisywanie filmu
 async function saveMovie(movieObj){
     const movie = new Model.Movie({
         title: movieObj.title,
@@ -38,6 +43,7 @@ async function saveMovie(movieObj){
     console.log(result);
 }
 
+// zapisywanie sali kinowej
 async function saveCinemaHall(cinemaHallObj){
     const cinemaHall = new Model.CinemaHall({
         name: cinemaHallObj.name,

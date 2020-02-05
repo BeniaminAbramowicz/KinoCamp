@@ -1,4 +1,5 @@
 const dataManager = require('./dataManager');
+const fetch = require('node-fetch');
 
 // funkcja generująca po 4 seanse, różnych filmów na cały tydzień
 async function generateScreenings(){
@@ -10,7 +11,7 @@ async function generateScreenings(){
         for(let i = 0 ;i < cinemaHallsId.length ; i++){
             screeningDate.setHours(9)                                       // kazdego dnia filmy od tej samej godziny  
             for(let j = 0 ; j < moviesId.length; j++){
-                screeningDate.setHours(screeningDate.getHours() + 3);       //filmy co trzy godziny 
+                screeningDate.setHours(screeningDate.getHours() + 2);       //filmy co dwie godziny 
                 await dataManager.saveScreening(cinemaHallsId[i],moviesId[j],screeningDate)
                 
             }
@@ -20,6 +21,7 @@ async function generateScreenings(){
 
 // funkcja czytające z pliku o formacie JSON i przekazujaca obiekty do zapisania
 const  getDataFromJSON = async function(url){
+    console.log("dupa");
     // pobieram dane
     await fetch(url)
     .then(res =>{
@@ -38,6 +40,10 @@ const saveData = async function(object){
     else if(object.title != undefined)
         dataManager.saveMovie(object);  // obiekt jest filmem
 }
+
+//getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/movies.json");
+//getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/hall.json");
+generateScreenings();
 
 
 

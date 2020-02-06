@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Model =  require('./model');
+const bcrypt = require('bcrypt');
 
 mongoose.connect('mongodb://localhost/KinoCamp')
 .then(()=> console.log('Ceonnected succesfully'))
@@ -54,6 +55,21 @@ async function saveCinemaHall(cinemaHallObj){
     console.log(result);
 }
 
+// zapisywanie usera
+const saveUser = async function(userObj){
+    const user = new Model.User({
+        name: userObj.name,
+        email: userObj.email,
+        password: userObj.password,
+    })
+    
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password,salt);      // hashowanie hasła
+    const result = await user.save();
+    console.log(result);
+}
+
+exports.saveUser = saveUser;
 exports.saveCinemaHall = saveCinemaHall;
 exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;

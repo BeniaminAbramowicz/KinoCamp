@@ -40,7 +40,7 @@ const User = mongoose.model('User', new mongoose.Schema({
         maxlength:100,
         unique:true
     },
-    email:{
+    password:{
         type:String,
         required: true,
         minlength: 6,
@@ -51,3 +51,4 @@ const User = mongoose.model('User', new mongoose.Schema({
 exports.Movie = Movie;
 exports.CinemaHall = CinemaHall;
 exports.Screening = Screening;
+exports.User = User;

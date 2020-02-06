@@ -1,13 +1,19 @@
 const model = require('./model');
-const Joi = require('joi');
+const dataManager = require('./dataManager')
+const bcrypt = require('bcrypt');
 
-function validateUser(user){
-    const schema = {
-        name: Joi.string().min(6).max(20).required(),
-        email: Joi.string().min(6).max(10).required().email(),
-        password: Joi.string().min(6).max(1024).required(),
-    }
-    return Joi.validate(user,schema)
+// funkcja służąca do autentykacji użytkownika, sprawdza 
+//czy istnieje użytkownik o taki emailu, a nasteonie czy hasło sie zgadza
+async function authenticateUser(userToAuth){
+    let user = await dataManager.getUserByEmail(userToAuth.email);    
+        if(!user)                   
+            return false;
+    let validPassword = await bcrypt.compare(userToAuth.password,user.password);
+        if(!validPassword)
+            return false;
+    return true;
 }
 
-exports.validateUser = validateUser;
+//authenticateUserTest();
+
+exports.validateUser = authenticateUser;

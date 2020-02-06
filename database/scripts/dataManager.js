@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Model =  require('./schema');
+const Model =  require('./model');
 
 mongoose.connect('mongodb://localhost/KinoCamp')
 .then(()=> console.log('Ceonnected succesfully'))

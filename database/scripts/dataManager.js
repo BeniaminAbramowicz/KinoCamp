@@ -119,6 +119,7 @@ exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;
 exports.getCinemaHallsId = getCinemaHallsId;
 exports.getMoviesId = getMoviesId;
+exports.updateUserData = updateUserData;
 
 
 

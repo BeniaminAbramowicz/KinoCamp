@@ -1,14 +1,7 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const appRouting = express();
+const dataManager = require('./database/scripts/dataManager');
+const router = express.Router();
 
-appRouting.use(bodyParser.urlencoded({extended: true}));
-appRouting.use(cors());
-appRouting.use(bodyParser.json());
+router.put('/profile/edit/:id', dataManager.updateUserData);
 
-appRouting.get('/', (req, res) => {
-    res.send('Main page');
-});
-
-appRouting.listen(3001, () => console.log('Express.js routing server is running'));
+module.exports = router;

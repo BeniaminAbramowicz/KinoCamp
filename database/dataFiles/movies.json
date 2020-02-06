@@ -1,0 +1,39 @@
+[
+    {
+    "title": "Spider-Man",
+    "genre":"Sci-fi",
+    "runningTime": 128,
+    "director": "Sami raimi",
+    "ageRestriction": 12
+    },
+    {
+    "title": "1917",
+    "genre":"Drama",
+    "runningTime": 119,
+    "director": "Sam Mendes",
+    "ageRestriction": 16
+    },
+    {
+    "title": "Joker",
+    "genre":"Crime",
+    "runningTime": 122,
+    "director": "Todd Phillips",
+    "ageRestriction": 18
+    },
+    {
+    "title": "Jojo Rabbit",
+    "genre":"Comedy",
+    "runningTime": 108,
+    "director": "Taika Waititi",
+    "ageRestriction": 7
+    },
+    {
+    "title": "Forrest Gump",
+    "genre":"Drama",
+    "runningTime": 144,
+    "director": "Robert Zemeckis",
+    "ageRestriction": 12
+    }
+
+    
+]

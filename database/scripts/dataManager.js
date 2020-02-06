@@ -6,21 +6,27 @@ mongoose.connect('mongodb://localhost/KinoCamp')
 .then(()=> console.log('Ceonnected succesfully'))
 .catch(err => console.error('Could not connect to MongoDB', err));
 
-// pobieranie id filmow z bazy danych
+
+async function getUserByEmail(email){
+    const user = await Model.User.findOne({email: email})
+    return user;
+}
+
+
 async function getMoviesId(){
     const movies = await Model.Movie.find()
     .select({_id_: 1});
     return movies;
 }
 
-//pobieranie id sal kinowych z bazy danych
+
 async function getCinemaHallsId(){
     cinemaHalls = await Model.CinemaHall.find()
     .select({_id :1});
     return cinemaHalls;
 }
 
-// zapisywanie seansu
+
 async function saveScreening(cinemaHallId,movieId,screeningDate){
     const screening = new Model.Screening({
         cinemaHallId: cinemaHallId,
@@ -31,7 +37,7 @@ async function saveScreening(cinemaHallId,movieId,screeningDate){
     console.log(result);
 }
 
-//zapisywanie filmu
+
 async function saveMovie(movieObj){
     const movie = new Model.Movie({
         title: movieObj.title,
@@ -44,7 +50,7 @@ async function saveMovie(movieObj){
     console.log(result);
 }
 
-// zapisywanie sali kinowej
+
 async function saveCinemaHall(cinemaHallObj){
     const cinemaHall = new Model.CinemaHall({
         name: cinemaHallObj.name,
@@ -55,7 +61,7 @@ async function saveCinemaHall(cinemaHallObj){
     console.log(result);
 }
 
-// zapisywanie usera
+
 const saveUser = async function(userObj){
     const user = new Model.User({
         name: userObj.name,
@@ -69,6 +75,7 @@ const saveUser = async function(userObj){
     console.log(result);
 }
 
+exports.getUserByEmail = getUserByEmail;
 exports.saveUser = saveUser;
 exports.saveCinemaHall = saveCinemaHall;
 exports.saveMovie = saveMovie;

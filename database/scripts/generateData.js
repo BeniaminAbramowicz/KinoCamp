@@ -6,7 +6,8 @@ const fetch = require('node-fetch');
 async function generateScreenings(){
     const moviesId = await dataManager.getMoviesId();                       // pobieram liste id filmów
     const cinemaHallsId = await dataManager.getCinemaHallsId();             // pobieram liste id sal kinowych
-    const screeningDate = new Date(2020,1,1)                                // ustawiam date początkową
+    const screeningDate = new Date(2020,1,1)        
+                            // ustawiam date początkową
     for(let day = 0; day < 7 ; day++ ){
         screeningDate.setDate(screeningDate.getDate() + 1)                  //nastepny dzien
         for(let i = 0 ;i < cinemaHallsId.length ; i++){
@@ -22,23 +23,22 @@ async function generateScreenings(){
 
 // funkcja czytające z pliku o formacie JSON i przekazujaca obiekty do zapisania
 const  getDataFromJSON = async function(url){
-    // pobieram dane
     await fetch(url)
     .then(res =>{
         return res.json();
     }).then(data => {
         data.map((object) =>{
-            saveData(object);       //każdy obiekt zapisuje do bazy
+            saveData(object);       
         });
     });
 }
 
 // funkcja przekazujaca dane do odpowiedniej funkcji zapisującej w zależności od tego czym jest obiekt(sala kinowa, film itd.)
 const saveData = async function(object){
-    if(object.rows != undefined)        //objekt to sala kinowa
+    if(object.rows != undefined)        
         await dataManager.saveCinemaHall(object);
     else if(object.title != undefined)
-        await dataManager.saveMovie(object);  // obiekt jest filmem
+        await dataManager.saveMovie(object);  
     else if(object.password != undefined)
         await dataManager.saveUser(object);
 }

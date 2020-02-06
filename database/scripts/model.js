@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-// model filmu
+
 const Screening = mongoose.model('Screening',new mongoose.Schema({
     cinemaHallId: mongoose.Schema.Types.ObjectId,
     movieId: mongoose.Schema.Types.ObjectId,
     date: Date
 }));
 
-//model sali kinowej
+
 const CinemaHall = mongoose.model('Hall', new mongoose.Schema({
     name:String,
     rows:[{ 
@@ -17,7 +17,7 @@ const CinemaHall = mongoose.model('Hall', new mongoose.Schema({
     }],
     prizeForSeats:Number
 }));
-// model senasu
+
 const Movie = mongoose.model('Movie', new mongoose.Schema({
     title: String,
     genre: String,

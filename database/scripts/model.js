@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const Booking = mongoose.model('Booking',new mongoose.Schema({
+    screeningId: mongoose.Schema.Types.ObjectId,
+    userId: mongoose.Schema.Types.ObjectId,
+    status: String
+}));
 
 const Screening = mongoose.model('Screening',new mongoose.Schema({
     cinemaHallId: mongoose.Schema.Types.ObjectId,
@@ -52,3 +57,4 @@ exports.Movie = Movie;
 exports.CinemaHall = CinemaHall;
 exports.Screening = Screening;
 exports.User = User;
+exports.Booking = Booking;

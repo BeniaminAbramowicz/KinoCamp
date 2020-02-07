@@ -12,6 +12,17 @@ async function getUserByEmail(email){
     return user;
 }
 
+async function getUsersId(){
+    const users = await Model.User.find()
+    .select({_id_: 1});
+    return users;
+}
+
+async function getScreeningsId(){
+    const screenings = await Model.Screening.find()
+    .select({_id_: 1});
+    return screenings;
+}
 
 async function getMoviesId(){
     const movies = await Model.Movie.find()
@@ -20,22 +31,31 @@ async function getMoviesId(){
 }
 
 
-async function getCinemaHallsId(){
-    cinemaHalls = await Model.CinemaHall.find()
-    .select({_id :1});
+async function getCinemaHalls(){
+    cinemaHalls = await Model.CinemaHall.find();
     return cinemaHalls;
 }
 
 
-async function saveScreening(cinemaHallId,movieId,screeningDate){
+async function saveScreening(cinemaHall,movieId,screeningDate){
     const screening = new Model.Screening({
-        cinemaHallId: cinemaHallId,
+        cinemaHall: cinemaHall,
         movieId : movieId,
         date : screeningDate
     });
     const result = await screening.save();
     console.log(result);
 }
+
+// async function saveBooking(cinema,movieId,screeningDate){
+//     const screening = new Model.Screening({
+//         cinemaHallId: cinemaHallId,
+//         movieId : movieId,
+//         date : screeningDate
+//     });
+//     const result = await screening.save();
+//     console.log(result);
+// }
 
 
 async function saveMovie(movieObj){
@@ -70,7 +90,7 @@ const saveUser = async function(userObj){
     })
     
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password,salt);      // hashowanie hasła
+    user.password = await bcrypt.hash(user.password,salt);      
     const result = await user.save();
     console.log(result);
 }
@@ -112,12 +132,14 @@ updateUserData = async (req, res) => {
     })
 }
 
+exports.getScreeningsId = getScreeningsId;
+exports.getUsersId = getUsersId;
 exports.getUserByEmail = getUserByEmail;
 exports.saveUser = saveUser;
 exports.saveCinemaHall = saveCinemaHall;
 exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;
-exports.getCinemaHallsId = getCinemaHallsId;
+exports.getCinemaHalls = getCinemaHalls;
 exports.getMoviesId = getMoviesId;
 exports.updateUserData = updateUserData;
 

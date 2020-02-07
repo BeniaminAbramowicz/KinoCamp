@@ -18,9 +18,8 @@ async function getUsersId(){
     return users;
 }
 
-async function getScreeningsId(){
-    const screenings = await Model.Screening.find()
-    .select({_id_: 1});
+async function getScreenings(){
+    const screenings = await Model.Screening.find();
     return screenings;
 }
 
@@ -44,6 +43,16 @@ async function saveScreening(cinemaHall,movieId,screeningDate){
         date : screeningDate
     });
     const result = await screening.save();
+    console.log(result);
+}
+
+async function saveBooking(userId,screeningId,bookedseats){
+    const booking = new Model.Booking({
+        screeningId: screeningId,
+        userId: userId,
+        seats: bookedseats,
+    });
+    const result = await booking.save();
     console.log(result);
 }
 
@@ -87,7 +96,8 @@ const saveUser = async function(userObj){
     console.log(result);
 }
 
-exports.getScreeningsId = getScreeningsId;
+exports.saveBooking = saveBooking;
+exports.getScreenings = getScreenings;
 exports.getUsersId = getUsersId;
 exports.getUserByEmail = getUserByEmail;
 exports.saveUser = saveUser;

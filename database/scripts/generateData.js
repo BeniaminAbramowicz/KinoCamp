@@ -14,24 +14,45 @@ async function generateScreenings(){
             for(let j = 0 ; j < moviesId.length; j++){
                 screeningDate.setHours(screeningDate.getHours() + 2);       //filmy co dwie godziny 
                 await dataManager.saveScreening(cinemaHalls[i],moviesId[j],screeningDate)
-                
             }
         }
     }   
 }
 
-
+// funkcja generujaca rezerwacje kazdego użytkownika na kazdy seans
 async function generateBooking(){
     const usersId = await dataManager.getUsersId();                       
-    const screeningsId = await dataManager.getCinemaHallsId();                   
+    const screenings = await dataManager.getScreenings();                   
                             
     for(let usersCounter = 0; usersCounter < usersId.length ; usersCounter++ ){
-        for(let screeningsCounter = 0 ;i < screeningsId.length ; screeningsCounter++){
-             dataManager.saveBooking()
-                
+        for(let screeningsCounter = 0 ;screeningsCounter < screenings.length ; screeningsCounter++){
+            let seats = getRandomSeats(screenings[screeningsCounter].cinemaHall.name);
+            dataManager.saveBooking(usersId[usersCounter], screenings[screeningsCounter].id,seats);
         }
     }
-}   
+}
+
+// funkcja generujaca tablice z losowo wybranymi miejscami do rezerwacji
+function getRandomSeats(cinemaHallName){
+    let hallSize;
+    let seatsNumber;
+    let rowNumber;
+    if(cinemaHallName === 'A') 
+        hallSize = 7;
+    else  
+        hallSize = 5;
+    row = randomInt(0,hallSize);
+    seatsNumber = randomInt(1,hallSize);
+    let seats = new Array(seatsNumber);
+    for(let i = 0 ; i < seatsNumber; i++){
+        seats[i] = {row :row, seat: i}; 
+    }
+    return seats
+}
+
+function randomInt(min,max) {
+	return min + Math.floor((max- min) * Math.random());
+}
 
 
 // funkcja czytające z pliku o formacie JSON i przekazujaca obiekty do zapisania
@@ -59,7 +80,8 @@ const saveData = async function(object){
 //getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/movies.json");
 //getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/hall.json");
 //getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/michal/database/dataFiles/users.json");
-generateScreenings();
+//generateScreenings();
+generateBooking();
 
 
 

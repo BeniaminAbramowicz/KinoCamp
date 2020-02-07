@@ -1,14 +1,12 @@
 const mongoose = require('mongoose');
 
-
-const Screening = mongoose.model('Screening',new mongoose.Schema({
-    cinemaHallId: mongoose.Schema.Types.ObjectId,
-    movieId: mongoose.Schema.Types.ObjectId,
-    date: Date
+const Booking = mongoose.model('Booking',new mongoose.Schema({
+    screeningId: mongoose.Schema.Types.ObjectId,
+    userId: mongoose.Schema.Types.ObjectId,
+    status: String
 }));
 
-
-const CinemaHall = mongoose.model('Hall', new mongoose.Schema({
+const CinemaHallSchema = new mongoose.Schema({
     name:String,
     rows:[{ 
             row:[
@@ -16,6 +14,14 @@ const CinemaHall = mongoose.model('Hall', new mongoose.Schema({
             ]
     }],
     prizeForSeats:Number
+});
+
+const CinemaHall = mongoose.model('cinemaHall', CinemaHallSchema);
+
+const Screening = mongoose.model('Screening',new mongoose.Schema({
+    cinemaHall: CinemaHallSchema,
+    movieId: mongoose.Schema.Types.ObjectId,
+    date: Date
 }));
 
 const Movie = mongoose.model('Movie', new mongoose.Schema({
@@ -52,3 +58,4 @@ exports.Movie = Movie;
 exports.CinemaHall = CinemaHall;
 exports.Screening = Screening;
 exports.User = User;
+exports.Booking = Booking;

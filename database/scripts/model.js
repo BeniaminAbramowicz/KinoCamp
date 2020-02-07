@@ -3,11 +3,21 @@ const mongoose = require('mongoose');
 const Booking = mongoose.model('Booking',new mongoose.Schema({
     screeningId: mongoose.Schema.Types.ObjectId,
     userId: mongoose.Schema.Types.ObjectId,
-    status: String
+    seats:[{
+        row:Number,
+        seat:Number
+    }],
+    status:{
+        type: String,
+        enum:['active','canceled']
+    }
 }));
 
 const CinemaHallSchema = new mongoose.Schema({
-    name:String,
+    name:{
+        type:String,
+        enum:['A','B']
+    },
     rows:[{ 
             row:[
                 {isEmpty:Boolean}
@@ -29,7 +39,10 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
     genre: String,
     runningTime: Number,
     director:String,
-    ageRestriction: Number
+    ageRestriction:{
+        type:Number,
+        enum: [0,7,12,16,18]
+    }
 }));
 
 const User = mongoose.model('User', new mongoose.Schema({

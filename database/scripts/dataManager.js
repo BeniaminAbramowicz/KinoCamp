@@ -3,7 +3,7 @@ const Model =  require('./model');
 const bcrypt = require('bcrypt');
 
 mongoose.connect('mongodb://localhost/KinoCamp')
-.then(()=> console.log('Ceonnected succesfully'))
+.then(()=> console.log('Connected succesfully'))
 .catch(err => console.error('Could not connect to MongoDB', err));
 
 
@@ -95,6 +95,43 @@ const saveUser = async function(userObj){
     console.log(result);
 }
 
+updateUserData = async (req, res) => {
+    const body = req.body;
+
+    if(!body){
+        return res.status(400).json({
+            success: false,
+            error: 'Bad request',
+        })
+    }
+
+    Model.User.find({email: req.params.email}, (err, user) =>{
+        if(err){
+            return res.status(404).json({
+                err,
+                message: 'User not found',
+            })
+        }
+
+        user.name = body.name;
+        user.email = body.email;
+        user.password = body.password;
+        user.save()
+        .then(() => {
+            return res.status(200).json({
+                success: true,
+                id: user._id,
+                message: 'User data updated',
+            })
+        }).catch(error => {
+            return res.status(404).json({
+                error,
+                message: 'User data failed to update',
+            })
+        })
+    })
+}
+
 exports.getScreeningsId = getScreeningsId;
 exports.getUsersId = getUsersId;
 exports.getUserByEmail = getUserByEmail;
@@ -104,6 +141,7 @@ exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;
 exports.getCinemaHalls = getCinemaHalls;
 exports.getMoviesId = getMoviesId;
+exports.updateUserData = updateUserData;
 
 
 

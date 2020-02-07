@@ -47,15 +47,7 @@ async function saveScreening(cinemaHall,movieId,screeningDate){
     console.log(result);
 }
 
-// async function saveBooking(cinema,movieId,screeningDate){
-//     const screening = new Model.Screening({
-//         cinemaHallId: cinemaHallId,
-//         movieId : movieId,
-//         date : screeningDate
-//     });
-//     const result = await screening.save();
-//     console.log(result);
-// }
+
 
 
 async function saveMovie(movieObj){
@@ -142,6 +134,8 @@ exports.saveScreening = saveScreening;
 exports.getCinemaHalls = getCinemaHalls;
 exports.getMoviesId = getMoviesId;
 exports.updateUserData = updateUserData;
+
+
 
 
 

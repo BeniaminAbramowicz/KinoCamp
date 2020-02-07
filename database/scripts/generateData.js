@@ -5,21 +5,21 @@ const fetch = require('node-fetch');
 // funkcja generująca po 4 seanse, różnych filmów na cały tydzień
 async function generateScreenings(){
     const moviesId = await dataManager.getMoviesId();                       
-    const cinemaHallsId = await dataManager.getCinemaHallsId();             
-    const screeningDate = new Date(2020,1,1)        
-                            
+    const cinemaHalls = await dataManager.getCinemaHalls();             
+    const screeningDate = new Date(2020,1,1)          
     for(let day = 0; day < 7 ; day++ ){
         screeningDate.setDate(screeningDate.getDate() + 1)                  //nastepny dzien
-        for(let i = 0 ;i < cinemaHallsId.length ; i++){
+        for(let i = 0 ;i < cinemaHalls.length ; i++){
             screeningDate.setHours(9)                                       // kazdego dnia filmy od tej samej godziny  
             for(let j = 0 ; j < moviesId.length; j++){
                 screeningDate.setHours(screeningDate.getHours() + 2);       //filmy co dwie godziny 
-                await dataManager.saveScreening(cinemaHallsId[i],moviesId[j],screeningDate)
+                await dataManager.saveScreening(cinemaHalls[i],moviesId[j],screeningDate)
                 
             }
         }
     }   
 }
+
 
 async function generateBooking(){
     const usersId = await dataManager.getUsersId();                       
@@ -29,10 +29,10 @@ async function generateBooking(){
         for(let screeningsCounter = 0 ;i < screeningsId.length ; screeningsCounter++){
              dataManager.saveBooking()
                 
-            }
         }
-    }   
-}
+    }
+}   
+
 
 // funkcja czytające z pliku o formacie JSON i przekazujaca obiekty do zapisania
 const  getDataFromJSON = async function(url){
@@ -58,8 +58,8 @@ const saveData = async function(object){
 
 //getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/movies.json");
 //getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/master/database/dataFiles/hall.json");
-getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/michal/database/dataFiles/users.json");
-//generateScreenings();
+//getDataFromJSON("https://raw.githubusercontent.com/BeniaminAbramowicz/KinoCamp/michal/database/dataFiles/users.json");
+generateScreenings();
 
 
 

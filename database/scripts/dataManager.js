@@ -31,16 +31,15 @@ async function getMoviesId(){
 }
 
 
-async function getCinemaHallsId(){
-    cinemaHalls = await Model.CinemaHall.find()
-    .select({_id :1});
+async function getCinemaHalls(){
+    cinemaHalls = await Model.CinemaHall.find();
     return cinemaHalls;
 }
 
 
-async function saveScreening(cinemaHallId,movieId,screeningDate){
+async function saveScreening(cinemaHall,movieId,screeningDate){
     const screening = new Model.Screening({
-        cinemaHallId: cinemaHallId,
+        cinemaHall: cinemaHall,
         movieId : movieId,
         date : screeningDate
     });
@@ -48,15 +47,15 @@ async function saveScreening(cinemaHallId,movieId,screeningDate){
     console.log(result);
 }
 
-async function saveBooking(,movieId,screeningDate){
-    const screening = new Model.Screening({
-        cinemaHallId: cinemaHallId,
-        movieId : movieId,
-        date : screeningDate
-    });
-    const result = await screening.save();
-    console.log(result);
-}
+// async function saveBooking(cinema,movieId,screeningDate){
+//     const screening = new Model.Screening({
+//         cinemaHallId: cinemaHallId,
+//         movieId : movieId,
+//         date : screeningDate
+//     });
+//     const result = await screening.save();
+//     console.log(result);
+// }
 
 
 async function saveMovie(movieObj){
@@ -103,7 +102,7 @@ exports.saveUser = saveUser;
 exports.saveCinemaHall = saveCinemaHall;
 exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;
-exports.getCinemaHallsId = getCinemaHallsId;
+exports.getCinemaHalls = getCinemaHalls;
 exports.getMoviesId = getMoviesId;
 
 

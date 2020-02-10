@@ -101,6 +101,28 @@ async function saveUser(req, res){
     return res.status(200).send();
 }
 
+async function loginUser(req, res){
+
+    const user = await Model.User.findOne({username: req.body.username});
+
+    if(!user) return res.status(400).send('Username or password incorrect');
+
+    const checkPassword = await bcrypt.compare(req.body.password, user.password);
+
+    if(!checkPassword) return res.status(400).send('Username or password incorrect');
+
+    req.session.user = user._id;
+    console.log(req.session.user);
+    return res.status(200).send("Logged in");
+
+}
+
+function logoutUser(req, res){
+    req.session.destroy();
+    console.log("Session destroyed");
+    return res.status(200).send("Session ended");
+}
+
 updateUserData = async (req, res) => {
     const body = req.body;
 
@@ -136,29 +158,6 @@ updateUserData = async (req, res) => {
             })
         })
     })
-}
-
-async function loginUser(req, res){
-    const username = req.body.username;
-    const password = req.body.password;
-
-    await models.User.findOne({username: username, password: password}, function(err, user){
-        if(err){
-            console.log(err);
-            return res.status(500).send();
-        }
-
-        if(!user){
-            return res.status(400).send();
-        }
-        req.session.user = user._id;
-        return res.status(200).send("test");
-    })
-}
-
-async function logoutUser(req, res){
-    req.session.destroy();
-    return res.status(200).send();
 }
 
 exports.logoutUser = logoutUser;

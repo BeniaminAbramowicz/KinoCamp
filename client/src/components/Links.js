@@ -17,6 +17,12 @@ const Item = styled.div.attrs({
 
 class Links extends React.Component {
 
+    logoutFunction = async () =>{
+        apis.logoutUser()
+        .then(console.log("Log out successful"))
+        .catch(err => console.log(err));
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -33,6 +39,18 @@ class Links extends React.Component {
                         <Item>
                             <Link to="/registerpage" className="nav-link">
                                 Register
+                            </Link>
+                        </Item>
+                    </List>
+                    <List>
+                        <Item>
+                            <Link to="/loginpage" className="nav-link">
+                                Login
+                            </Link>
+                        </Item>
+                        <Item>
+                            <Link to="/logout" className="nav-link" onClick={this.logoutFunction}>
+                                Logout
                             </Link>
                         </Item>
                     </List>

@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar'
 import '../style/styles.css'
 import ScreeningsPage from '../pages/ScreeningsPage';
 import RegisterPage from '../pages/RegisterPage'
+import LoginPage from '../pages/LoginPage'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -13,9 +14,11 @@ function App() {
       <Switch>
         <Route path="/screenings" exact component={ScreeningsPage} />
         <Route path="/registerpage" exact component={RegisterPage} />
+        <Route path="/loginpage" exact component={LoginPage} />
+        <Route path="/logout" exact component={LoginPage} />
       </Switch>
     </Router>
   );
 }
 
-export default App;
+export default App

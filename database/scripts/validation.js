@@ -1,6 +1,7 @@
 const dataManager = require('./dataManager')
 const bcrypt = require('bcrypt')
 const Joi = require('@hapi/joi')
+const Model = require('./model')
 
 // funkcja służąca do autentykacji użytkownika, sprawdza 
 //czy istnieje użytkownik o taki emailu, a nasteonie czy hasło sie zgadza
@@ -26,7 +27,6 @@ function registerUserValidation(user){
     });
     return schema.validate(user);
 }
-
 
 module.exports.validateUser = authenticateUser;
 module.exports.registerUserValidation = registerUserValidation;

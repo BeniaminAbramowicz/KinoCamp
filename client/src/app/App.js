@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router } from 'express';
 import { NavBar } from '../components'
+import '../style/styles.css'
 
 function App() {
   return (

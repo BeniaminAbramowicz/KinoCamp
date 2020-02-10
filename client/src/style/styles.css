@@ -1,0 +1,64 @@
+html, body{
+    width: 100%;
+    height: 100vh;
+}
+
+.main-navbar{
+    width: 100%;
+}
+
+.screeningsContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.screeningsElement{
+    width: 40%;
+    height: auto;
+    margin: 1rem auto;
+    border-style: solid;
+    border-color: rgb(53, 68, 64);
+    padding: 1rem;
+}
+
+.screeningsElement > h2{
+    text-align: center;
+}
+
+#movieDescription{
+    float: left;
+    text-align: justify;
+    width: 50%;
+}
+
+#additionalInfo{
+    clear: both;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#additionalInfo td{
+    width: 33%;
+}
+
+#additionalInfo td:first-child{
+    text-align: left;
+}
+#additionalInfo td:nth-child(2){
+    text-align: center;
+}
+
+#additionalInfo td:nth-child(3){
+    text-align: right;
+}
+
+#additionalInfo table{
+    width: 100%;
+}
+
+#mainInfo{
+    float:left;
+    width: 50%;
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import apis from '../api/index'
+import ScreeningsComponent from '../components/ScreeningsComponent'
 
 class ScreeningsPage extends React.Component{
 

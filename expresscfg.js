@@ -4,6 +4,7 @@ const cors = require('cors');
 const appRouting = express();
 const db = require('./databasecfg');
 const routing = require('./routing');
+const cont = require('./database/scripts/dataManager')
 
 appRouting.use(bodyParser.urlencoded({extended: true}));
 appRouting.use(cors());
@@ -16,5 +17,4 @@ appRouting.get('/', (req, res) => {
 });
 
 appRouting.use('/api', routing);
-
 appRouting.listen(3001, () => console.log('Express.js routing server is running'));

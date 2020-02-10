@@ -1,11 +1,5 @@
-const mongoose = require('mongoose');
 const Model =  require('./model');
 const bcrypt = require('bcrypt');
-
-mongoose.connect('mongodb://localhost/KinoCamp')
-.then(()=> console.log('Connected succesfully'))
-.catch(err => console.error('Could not connect to MongoDB', err));
-
 
 async function getUserByEmail(email){
     const user = await Model.User.findOne({email: email})
@@ -19,8 +13,9 @@ async function getUsersId(){
 }
 
 async function getScreenings(req, res){
-    const screenings = await Model.Screening.find().populate('movie');
-    return res.json(screenings);
+    const screeningsList = await Model.Screening.find().populate('movie');
+    console.log(screeningsList);
+    return res.json(screeningsList);
 }
 
 async function getMoviesId(){
@@ -36,10 +31,10 @@ async function getCinemaHalls(){
 }
 
 
-async function saveScreening(cinemaHall,movieId,screeningDate){
+async function saveScreening(cinemaHall,movie,screeningDate){
     const screening = new Model.Screening({
         cinemaHall: cinemaHall,
-        movieId : movieId,
+        movie : movie,
         date : screeningDate
     });
     const result = await screening.save();

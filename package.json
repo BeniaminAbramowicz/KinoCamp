@@ -2,7 +2,6 @@
   "name": "kinocamp",
   "version": "1.0.0",
   "description": "React/Node application with main functionalities: - displaying screenings schedule - booking seats for a movie - displaying movies list",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

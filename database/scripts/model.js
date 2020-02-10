@@ -19,15 +19,11 @@ const CinemaHallSchema = new mongoose.Schema({
         type:String,
         enum:['A','B']
     },
-    rows:[{ 
-            row:[
-                {isEmpty:Boolean}
-            ]
-    }],
+    seats:[[Boolean]],
     prizeForSeats:Number
 });
 
-const CinemaHall = mongoose.model('cinemaHall', CinemaHallSchema);
+const CinemaHall = mongoose.model('CinemaHall', CinemaHallSchema);
 
 const Screening = mongoose.model('Screening',new mongoose.Schema({
     cinemaHall: CinemaHallSchema,
@@ -41,6 +37,7 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
     title: String,
     genre: String,
     runningTime: Number,
+    description: String,
     director:String,
     ageRestriction:{
         type:Number,

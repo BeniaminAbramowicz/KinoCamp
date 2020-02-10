@@ -30,6 +30,11 @@ class Links extends React.Component {
                                 Screenings
                             </Link>
                         </Item>
+                        <Item>
+                            <Link to="/registerpage" className="nav-link">
+                                Register
+                            </Link>
+                        </Item>
                     </List>
                 </Collapse>
             </React.Fragment>

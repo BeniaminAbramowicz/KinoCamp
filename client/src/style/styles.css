@@ -62,3 +62,32 @@ html, body{
     float:left;
     width: 50%;
 }
+
+.register-form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.register-form{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: auto;
+    margin: 1rem auto;
+    border-style: solid;
+    border-color: rgb(53, 68, 64);
+    padding: 1rem;
+}
+
+.register-form input{
+    width: 100%;
+    border-radius: 5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.register-form label{
+    width: 100%;
+}

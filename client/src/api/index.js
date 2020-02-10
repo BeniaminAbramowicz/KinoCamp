@@ -5,7 +5,8 @@ const api = axios.create({
 })
 
 const getAllScreenings = () => api.get('/screenings')
+const registerNewUser = (data) => api.post('/register', data)
 
-const apis = {getAllScreenings}
+const apis = {getAllScreenings, registerNewUser}
 
 export default apis

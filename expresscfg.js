@@ -4,11 +4,13 @@ const cors = require('cors');
 const appRouting = express();
 const db = require('./databasecfg');
 const routing = require('./routing');
+var session = require('express-session')
 const cont = require('./database/scripts/dataManager')
 
 appRouting.use(bodyParser.urlencoded({extended: true}));
 appRouting.use(cors());
 appRouting.use(bodyParser.json());
+appRouting.use(session({secret:'qwertyuiop', resave: false, saveUninitialized: true}));
 
 db.on('error', console.error.bind(console, 'Database connection error: '));
 

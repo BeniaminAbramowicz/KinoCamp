@@ -1,5 +1,5 @@
 const Model =  require('./model');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
 
 async function getUserByEmail(email){
     const user = await Model.User.findOne({email: email})
@@ -78,18 +78,19 @@ async function saveCinemaHall(cinemaHallObj){
 }
 
 
-const saveUser = async function(userObj){
+async function saveUser(req, res){
     const user = new Model.User({
-        name: userObj.name,
-        email: userObj.email,
-        password: userObj.password,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
     })
     
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     user.password = await bcrypt.hash(user.password,salt);      
-    const result = await user.save();
-    console.log(result);
+    await user.save();
+    return res.status(200).send();
 }
+
 updateUserData = async (req, res) => {
     const body = req.body;
 
@@ -127,6 +128,31 @@ updateUserData = async (req, res) => {
     })
 }
 
+async function loginUser(req, res){
+    const username = req.body.username;
+    const password = req.body.password;
+
+    await models.User.findOne({username: username, password: password}, function(err, user){
+        if(err){
+            console.log(err);
+            return res.status(500).send();
+        }
+
+        if(!user){
+            return res.status(400).send();
+        }
+        req.session.user = user._id;
+        return res.status(200).send("test");
+    })
+}
+
+async function logoutUser(req, res){
+    req.session.destroy();
+    return res.status(200).send();
+}
+
+exports.logoutUser = logoutUser;
+exports.loginUser = loginUser;
 exports.saveBooking = saveBooking;
 exports.getScreenings = getScreenings;
 exports.getUsersId = getUsersId;

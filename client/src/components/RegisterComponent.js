@@ -32,6 +32,7 @@ class RegisterForm extends React.Component{
         return(
             <div className="register-form">
                 <h2>Register form</h2>
+                {this.props.errorMessage && <h3>{this.state.errorMessage}</h3>}
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Username:

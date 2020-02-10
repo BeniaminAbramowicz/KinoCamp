@@ -86,7 +86,7 @@ async function saveUser(req, res){
     })
     
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-    user.password = await bcrypt.hash(user.password,salt);      
+    user.password = await bcrypt.hash(user.password, salt);      
     await user.save();
     return res.status(200).send();
 }

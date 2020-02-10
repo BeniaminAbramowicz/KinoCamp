@@ -15,12 +15,12 @@ async function authenticateUser(userToAuth){
     return true;
 }
 
-
 function registerUserValidation(user){
     const regexpw= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    const regexmail= /[^@]+@[^\.]+\..+/;
     const schema = Joi.object({
         username: Joi.string().min(6).max(20).required(),
-        email: Joi.string().min(7).max(100).required(),
+        email: Joi.string().min(7).max(100).required().pattern(regexmail),
         name: Joi.string().min(2).max(100).required(),
         surname: Joi.string().min(2).max(100).required(),
         password: Joi.string().min(6).pattern(regexpw)

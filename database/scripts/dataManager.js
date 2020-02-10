@@ -103,18 +103,20 @@ async function saveUser(req, res){
 
 async function loginUser(req, res){
 
-    const user = await Model.User.findOne({username: req.body.username});
+    await Model.User.findOne({username: req.body.username}, async function(err, user){
+        if(err){
+            console.log(err);
+            return res.status(500).send();
+        }
+        if(!user) return res.status(400).send('Username or password incorrect');
 
-    if(!user) return res.status(400).send('Username or password incorrect');
+        const checkPassword = await bcrypt.compare(req.body.password, user.password);
+        if(!checkPassword) return res.status(400).send('Username or password incorrect');
 
-    const checkPassword = await bcrypt.compare(req.body.password, user.password);
-
-    if(!checkPassword) return res.status(400).send('Username or password incorrect');
-
-    req.session.user = user._id;
-    console.log(req.session.user);
-    return res.status(200).send("Logged in");
-
+        req.session.user = user._id;
+        console.log(req.session.user);
+        return res.status(200).send("Logged in");
+    });
 }
 
 function logoutUser(req, res){

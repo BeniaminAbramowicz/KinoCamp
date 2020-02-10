@@ -1,5 +1,6 @@
 const Model =  require('./model');
 const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
+const validation = require('./validation')
 
 async function getUserByEmail(email){
     const user = await Model.User.findOne({email: email})
@@ -14,7 +15,6 @@ async function getUsersId(){
 
 async function getScreenings(req, res){
     const screeningsList = await Model.Screening.find().populate('movie');
-    console.log(screeningsList);
     return res.json(screeningsList);
 }
 
@@ -79,12 +79,22 @@ async function saveCinemaHall(cinemaHallObj){
 
 
 async function saveUser(req, res){
+    
+    const validationError = validation.registerUserValidation(req.body);
+    if(validationError.hasOwnProperty("error")) return res.status(400).send(validationError.error.message);
+    const userByMail = await Model.User.findOne({email: req.body.email});
+    if(userByMail) return res.status(400).send('User already registered');
+    const userByNickname = await Model.User.findOne({username: req.body.username});
+    if(userByNickname) return res.status(400).send('User already registered');
+
     const user = new Model.User({
         username: req.body.username,
         email: req.body.email,
+        name: req.body.name,
+        surname: req.body.surname,
         password: req.body.password,
     })
-    
+
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     user.password = await bcrypt.hash(user.password, salt);      
     await user.save();

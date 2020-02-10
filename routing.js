@@ -10,5 +10,4 @@ router.post('/login', dataManager.loginUser);
 router.get('/logout', dataManager.logoutUser);
 router.get('/loginpage');
 
-
 module.exports = router;

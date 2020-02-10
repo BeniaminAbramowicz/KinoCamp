@@ -8,8 +8,12 @@ class RegisterPage extends React.Component{
         errorMessage: ''
     }
 
-    handleSubmit(data){
-        apis.registerNewUser(data).catch(err => this.setState({errorMessage: err}));
+    handleSubmit= async (userData) =>{
+        await apis.registerNewUser(userData)
+        .then(res => console.log(res.body))
+        .catch(err => {
+            this.setState({errorMessage: err.response.data});
+        })   
     }
     
     render(){

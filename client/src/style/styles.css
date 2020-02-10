@@ -91,3 +91,12 @@ html, body{
 .register-form label{
     width: 100%;
 }
+
+#register-form-error{
+    color: red;
+    font-size: 1rem;
+}
+
+.register-form-requirement{
+    color: blue;
+}

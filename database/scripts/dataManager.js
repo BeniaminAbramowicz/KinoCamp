@@ -18,9 +18,9 @@ async function getUsersId(){
     return users;
 }
 
-async function getScreenings(){
-    const screenings = await Model.Screening.find();
-    return screenings;
+async function getScreenings(req, res){
+    const screenings = await Model.Screening.find().populate('movie');
+    return res.json(screenings);
 }
 
 async function getMoviesId(){

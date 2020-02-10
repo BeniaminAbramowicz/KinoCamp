@@ -31,7 +31,9 @@ const CinemaHall = mongoose.model('cinemaHall', CinemaHallSchema);
 
 const Screening = mongoose.model('Screening',new mongoose.Schema({
     cinemaHall: CinemaHallSchema,
-    movieId: mongoose.Schema.Types.ObjectId,
+    movie: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Movie'},
     date: Date
 }));
 

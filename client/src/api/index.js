@@ -8,7 +8,8 @@ const getAllScreenings = () => api.get('/screenings');
 const registerNewUser = (data) => api.post('/register', data);
 const loginUser = (data) => api.post('/login', data);
 const logoutUser = () => api.get('/logout');
+const createReservation = (data) => api.post('/createreservation', data);
 
-const apis = {getAllScreenings, registerNewUser, loginUser, logoutUser};
+const apis = {getAllScreenings, registerNewUser, loginUser, logoutUser, createReservation};
 
 export default apis

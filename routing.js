@@ -9,5 +9,6 @@ router.put('/profile/edit/:id', dataManager.updateUserData);
 router.post('/login', dataManager.loginUser);
 router.get('/logout', dataManager.logoutUser);
 router.get('/loginpage');
+router.post('/createreservation', dataManager.saveBooking);
 
 module.exports = router;

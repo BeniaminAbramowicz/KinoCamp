@@ -1,26 +1,32 @@
 const mongoose = require('mongoose');
 
 const Booking = mongoose.model('Booking',new mongoose.Schema({
-    screeningId: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
+    screening: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Screening'},
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    totalPrice: Number,
     seats:[{
-        row:Number,
-        seat:Number
+        row: Number,
+        seat: Number
     }],
     status:{
         type: String,
-        enum:['active','canceled'],
+        enum: ['active','canceled'],
         default: 'active'
     }
 }));
 
 const CinemaHallSchema = new mongoose.Schema({
     name:{
-        type:String,
-        enum:['A','B']
+        type: String,
+        enum: ['A','B']
     },
     seats: [[Boolean]],
-    prizeForSeats: Number
+    priceForSeats: Number
 });
 
 const CinemaHall = mongoose.model('CinemaHall', CinemaHallSchema);
@@ -38,11 +44,12 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
     genre: String,
     runningTime: Number,
     description: String,
-    director:String,
+    director: String,
     ageRestriction:{
         type: String,
         enum: ['G', 'PG', 'PG-13', 'R', 'NC-17']
-    }
+    },
+    picture: String
 }));
 
 const User = mongoose.model('User', new mongoose.Schema({

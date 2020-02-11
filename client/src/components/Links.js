@@ -7,8 +7,12 @@ const Collapse = styled.div.attrs({
     className: 'collpase navbar-collapse',
 })``
 
-const List = styled.div.attrs({
+const List1 = styled.div.attrs({
     className: 'navbar-nav mr-auto',
+})``
+
+const List2 = styled.div.attrs({
+    className: 'navbar-nav',
 })``
 
 const Item = styled.div.attrs({
@@ -30,7 +34,7 @@ class Links extends React.Component {
                     Cinema Booking App
                 </Link>
                 <Collapse>
-                    <List>
+                    <List1>
                         <Item>
                             <Link to="/screenings" className="nav-link">
                                 Screenings
@@ -41,8 +45,13 @@ class Links extends React.Component {
                                 Register
                             </Link>
                         </Item>
-                    </List>
-                    <List>
+                    </List1>
+                    <List2>
+                        <Item>
+                            <Link to="/profile" className="nav-link">
+                                Profile
+                            </Link>
+                        </Item>
                         <Item>
                             <Link to="/loginpage" className="nav-link">
                                 Login
@@ -53,7 +62,7 @@ class Links extends React.Component {
                                 Logout
                             </Link>
                         </Item>
-                    </List>
+                    </List2>
                 </Collapse>
             </React.Fragment>
         )

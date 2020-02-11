@@ -1,6 +1,7 @@
 const Model =  require('./model');
 const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
-const validation = require('./validation')
+const validation = require('./validation');
+const nodemailer = require('nodemailer');
 
 async function getUserByEmail(email){
     const user = await Model.User.findOne({email: email})
@@ -13,23 +14,16 @@ async function getUsersId(){
     return users;
 }
 
-async function getScreenings(req, res){
-    const screeningsList = await Model.Screening.find().populate('movie');
-    return res.json(screeningsList);
-}
-
 async function getMoviesId(){
     const movies = await Model.Movie.find()
     .select({_id_: 1});
     return movies;
 }
 
-
 async function getCinemaHalls(){
     cinemaHalls = await Model.CinemaHall.find();
     return cinemaHalls;
 }
-
 
 async function saveScreening(cinemaHall,movie,screeningDate){
     const screening = new Model.Screening({
@@ -40,19 +34,6 @@ async function saveScreening(cinemaHall,movie,screeningDate){
     const result = await screening.save();
     console.log(result);
 }
-
-async function saveBooking(userId,screeningId,bookedseats){
-    const booking = new Model.Booking({
-        screeningId: screeningId,
-        userId: userId,
-        seats: bookedseats,
-    });
-    const result = await booking.save();
-    console.log(result);
-}
-
-
-
 
 async function saveMovie(movieObj){
     const movie = new Model.Movie({
@@ -66,7 +47,6 @@ async function saveMovie(movieObj){
     console.log(result);
 }
 
-
 async function saveCinemaHall(cinemaHallObj){
     const cinemaHall = new Model.CinemaHall({
         name: cinemaHallObj.name,
@@ -77,9 +57,67 @@ async function saveCinemaHall(cinemaHallObj){
     console.log(result);
 }
 
+async function getScreenings(req, res){
+    const screeningsList = await Model.Screening.find().populate('movie');
+    return res.json(screeningsList);
+}
+
+async function saveBooking(req, res){
+
+    const screeningData = await Model.Screening.findOne({_id: req.body.screening});
+    let finalPrice = 0;
+    if(req.body.amountOfSeats !== req.body.bookedSeats.length){
+        finalPrice = req.body.bookedSeats.length * screeningData.cinemaHall.priceForSeats;
+    } else {
+        finalPrice = req.body.totalPrice;
+    }
+    for(var i = 0; i < req.body.bookedSeats.length; i++){
+        if(screeningData.cinemaHall.seats[req.body.bookedSeats[i].row - 1][req.body.bookedSeats[i].seat - 1]){
+            return res.status(400).send();
+        }
+    }
+
+    const booking = new Model.Booking({
+        screening: req.body.screening,
+        user: req.body.user,
+        totalPrice: finalPrice,
+        seats: req.body.bookedSeats,
+    });
+    const result = await booking.save();
+    console.log(result);
+
+    const userForEmail = await Model.User.findOne({_id: req.body.user});
+
+    async function main(){
+
+        let testAccount = await nodemailer.createTestAccount();
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+            user: testAccount.user,
+            pass: testAccount.pass
+            }
+        });
+
+          await transporter.sendMail({
+            from: '"Cinema Booking App" <cinemabookingapp@example.com>',
+            to: "chaosdefrost15@gmail.com",
+            subject: "Reservation number " + result._id,
+            html: "<h2> Movie: " + screeningData.movie.title + "</h2>"
+            + "<h4>Date: " + screeningData.date + "</h4>" 
+            + "<h4>Ticket(s) total price: " + finalPrice + "</h4>"
+            + "<h4>Seats count: " + req.body.bookedSeats.length + "</h4>"
+          });
+    }
+    main().catch(console.error);
+
+    return res.status(200).send();
+}
 
 async function saveUser(req, res){
-    
     const validationError = validation.registerUserValidation(req.body);
     if(validationError.hasOwnProperty("error")) return res.status(400).send(validationError.error.message);
     const userByMail = await Model.User.findOne({email: req.body.email});
@@ -102,7 +140,6 @@ async function saveUser(req, res){
 }
 
 async function loginUser(req, res){
-
     await Model.User.findOne({username: req.body.username}, async function(err, user){
         if(err){
             console.log(err);
@@ -119,8 +156,8 @@ async function loginUser(req, res){
     });
 }
 
-function logoutUser(req, res){
-    req.session.destroy();
+async function logoutUser(req, res){
+    await req.session.destroy();
     console.log("Session destroyed");
     return res.status(200).send("Session ended");
 }

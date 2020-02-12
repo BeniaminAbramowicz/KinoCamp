@@ -50,7 +50,7 @@ class RegisterForm extends React.Component{
                     </label>
                     <label>
                         Email <span className="register-form-requirement">(Must be at least 7 characters long)</span>:
-                        <input type="text" value={this.state.email} onChange={this.emailChange} />
+                        <input type="email" value={this.state.email} onChange={this.emailChange} />
                     </label>
                     <label>
                         Name <span className="register-form-requirement">(Must be at least 2 characters long)</span>:

@@ -1,23 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
 import apis from '../api/index'
-
-const Collapse = styled.div.attrs({
-    className: 'collpase navbar-collapse',
-})``
-
-const List1 = styled.div.attrs({
-    className: 'navbar-nav mr-auto',
-})``
-
-const List2 = styled.div.attrs({
-    className: 'navbar-nav',
-})``
-
-const Item = styled.div.attrs({
-    className: 'collpase navbar-collapse',
-})``
+import Logo from '../components/Logo'
 
 class Links extends React.Component {
 
@@ -29,42 +12,46 @@ class Links extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
-                <Link to="/" className="navbar-brand">
-                    Cinema Booking App
-                </Link>
-                <Collapse>
-                    <List1>
-                        <Item>
-                            <Link to="/screenings" className="nav-link">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark main-navbar">
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <Logo />
+                    <a href="/" className="navbar-brand">
+                        Cinema Booking App
+                    </a>
+                    <ul className="navbar-nav navbar-inner">
+                        <li className="nav-item">
+                            <a href="/screenings" className="nav-link">
                                 Screenings
-                            </Link>
-                        </Item>
-                        <Item>
-                            <Link to="/registerpage" className="nav-link">
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="/registerpage" className="nav-link">
                                 Register
-                            </Link>
-                        </Item>
-                    </List1>
-                    <List2>
-                        <Item>
-                            <Link to="/profile" className="nav-link">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul id="nav-logout" className="navbar-nav navbar-inner">
+                        <li className="nav-item">
+                            <a href="/profile" className="nav-link">
                                 Profile
-                            </Link>
-                        </Item>
-                        <Item>
-                            <Link to="/loginpage" className="nav-link">
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="/loginpage" className="nav-link">
                                 Login
-                            </Link>
-                        </Item>
-                        <Item>
-                            <Link to="/logout" className="nav-link" onClick={this.logoutFunction}>
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="/logout" className="nav-link" onClick={this.logoutFunction}>
                                 Logout
-                            </Link>
-                        </Item>
-                    </List2>
-                </Collapse>
-            </React.Fragment>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         )
     }
 }

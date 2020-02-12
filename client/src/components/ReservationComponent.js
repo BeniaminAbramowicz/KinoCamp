@@ -23,7 +23,7 @@ class ReservationWindow extends React.Component{
     render(){
         return (
             <div key={this.id} className="reservation-element">
-                <div id="close-button" onClick={this.props.closeDetails} className="close-reservation">X</div><span className="close-text">Zamknij okno rezerwacji</span>
+                <div id="close-button" onClick={this.props.closeDetails} className="close-reservation">X</div><span className="close-text">Close reservation window</span>
                 <div>
                     <h2>{this.movie.title}</h2>
                     <hr></hr>

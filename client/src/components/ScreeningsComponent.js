@@ -12,7 +12,9 @@ const ScreeningsToRender = props =>{
     }
 
     const closeDetails = () => {
-        setModalOpened(false);
+        const resWindow = document.getElementsByClassName('reservation-element')[0];
+        resWindow.classList.add('close-transition');
+        setTimeout(() => {setModalOpened(false)}, 270);  
     }
 
     const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}) => {

@@ -28,7 +28,7 @@ const ScreeningsToRender = props =>{
         let dateToPass = {day: day, month: month, year: year, hours: hours, minutes: minutes};
 
         return (
-            <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screeningsElement">
+            <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screenings-element">
                 <div className="movie-image">
                     <img src={require(`../images/${movie.picture}`)} width="100%" height="auto" alt="spiderman-poster"/>
                 </div>
@@ -41,7 +41,7 @@ const ScreeningsToRender = props =>{
             </div>
         );
     });
-    return <div className="screeningsContainer">{scrs}{modalOpened ? <ReservationComponent chosenReservation={chosenScreening} closeDetails={closeDetails} /> : null}</div>
+    return <div className="screenings-container">{scrs}{modalOpened ? <ReservationComponent chosenReservation={chosenScreening} closeDetails={closeDetails} /> : null}</div>
 }
 
 export default ScreeningsToRender

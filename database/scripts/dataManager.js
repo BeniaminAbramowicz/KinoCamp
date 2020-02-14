@@ -2,6 +2,8 @@ const Model =  require('./model');
 const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
 const validation = require('./validation');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const secret = 'rr3r45r3534frety54645y45y45y4yy54';
 
 async function getUserByEmail(email){
     const user = await Model.User.findOne({email: email})
@@ -14,15 +16,25 @@ async function getUsersId(){
     return users;
 }
 
+async function getUserById(req, res){
+    if(req.session.testing){
+        await Model.User.findOne({_id: jwt.decode(req.session.testing).userId})
+        .select({username: 1, email: 1, name: 1, surname: 1})
+        .then((user) => {
+            return res.status(200).send(user);
+        })
+        .catch(err => {
+            return res.status(500).send(err + " | Server failed to fetch data");
+        });
+    } else {
+        return res.status(401).json({error: 'You must be logged in to view profile'});
+    } 
+}
+
 async function getMoviesId(){
     const movies = await Model.Movie.find()
     .select({_id_: 1});
     return movies;
-}
-
-async function getCinemaHalls(){
-    cinemaHalls = await Model.CinemaHall.find();
-    return cinemaHalls;
 }
 
 async function saveScreening(cinemaHall,movie,screeningDate){
@@ -58,8 +70,13 @@ async function saveCinemaHall(cinemaHallObj){
 }
 
 async function getScreenings(req, res){
-    const screeningsList = await Model.Screening.find().populate('movie');
-    return res.json(screeningsList);
+    await Model.Screening.find().populate('movie')
+    .then(screeningsList => {
+        return res.status(200).json(screeningsList);
+    }).catch(err => {
+        return res.status(500).json({errorMessage: err + " | There was an error when attempting to get data from the server"});
+    });
+    
 }
 
 async function saveBooking(req, res){
@@ -104,7 +121,7 @@ async function saveBooking(req, res){
 
           await transporter.sendMail({
             from: '"Cinema Booking App" <cinemabookingapp@example.com>',
-            to: "chaosdefrost15@gmail.com",
+            to: "example@example.com",
             subject: "Reservation number " + result._id,
             html: "<h2> Movie: " + screeningData.movie.title + "</h2>"
             + "<h4>Date: " + screeningData.date + "</h4>" 
@@ -146,59 +163,26 @@ async function loginUser(req, res){
             return res.status(500).send();
         }
         if(!user) return res.status(400).send('Username or password incorrect');
+        const checkPassword = await bcrypt.compare(lol, user.password);
 
-        const checkPassword = await bcrypt.compare(req.body.password, user.password);
         if(!checkPassword) return res.status(400).send('Username or password incorrect');
 
-        req.session.user = user._id;
-        console.log(req.session.user);
-        return res.status(200).send("Logged in");
+        const token = jwt.sign({username: req.body.username, userId: user._id}, secret, {expiresIn: "1h"});
+        req.session.testing = token;
+        return res.status(201).json({message: 'You have been logged in'});
     });
 }
 
 async function logoutUser(req, res){
     await req.session.destroy();
-    console.log("Session destroyed");
     return res.status(200).send("Session ended");
 }
 
-updateUserData = async (req, res) => {
-    const body = req.body;
+async function updateUserData(req, res){
 
-    if(!body){
-        return res.status(400).json({
-            success: false,
-            error: 'Bad request',
-        })
-    }
-
-    Model.User.find({email: req.params.email}, (err, user) =>{
-        if(err){
-            return res.status(404).json({
-                err,
-                message: 'User not found',
-            })
-        }
-
-        user.name = body.name;
-        user.email = body.email;
-        user.password = body.password;
-        user.save()
-        .then(() => {
-            return res.status(200).json({
-                success: true,
-                id: user._id,
-                message: 'User data updated',
-            })
-        }).catch(error => {
-            return res.status(404).json({
-                error,
-                message: 'User data failed to update',
-            })
-        })
-    })
 }
 
+exports.getUserById = getUserById;
 exports.logoutUser = logoutUser;
 exports.loginUser = loginUser;
 exports.saveBooking = saveBooking;
@@ -209,7 +193,6 @@ exports.saveUser = saveUser;
 exports.saveCinemaHall = saveCinemaHall;
 exports.saveMovie = saveMovie;
 exports.saveScreening = saveScreening;
-exports.getCinemaHalls = getCinemaHalls;
 exports.getMoviesId = getMoviesId;
 exports.updateUserData = updateUserData;
 

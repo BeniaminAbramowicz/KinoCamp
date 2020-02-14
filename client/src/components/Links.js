@@ -2,11 +2,14 @@ import React from 'react'
 import apis from '../api/index'
 import Logo from '../components/Logo'
 
+
 class Links extends React.Component {
 
     logoutFunction = async () =>{
         apis.logoutUser()
-        .then(console.log("Log out successful"))
+        .then(() => {
+            this.props.history.push('/');
+        })
         .catch(err => console.log(err));
     }
 
@@ -45,7 +48,7 @@ class Links extends React.Component {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a href="/logout" className="nav-link" onClick={this.logoutFunction}>
+                            <a href="/" className="nav-link" onClick={this.logoutFunction}>
                                 Logout
                             </a>
                         </li>

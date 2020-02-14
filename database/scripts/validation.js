@@ -1,7 +1,6 @@
 const dataManager = require('./dataManager')
 const bcrypt = require('bcrypt')
 const Joi = require('@hapi/joi')
-const Model = require('./model')
 
 // funkcja służąca do autentykacji użytkownika, sprawdza 
 //czy istnieje użytkownik o taki emailu, a nasteonie czy hasło sie zgadza
@@ -16,7 +15,7 @@ async function authenticateUser(userToAuth){
 }
 
 function registerUserValidation(user){
-    const regexpw= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    const regexpw= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
     const regexmail= /[^@]+@[^\.]+\..+/;
     const schema = Joi.object({
         username: Joi.string().min(6).max(20).required(),
@@ -28,5 +27,20 @@ function registerUserValidation(user){
     return schema.validate(user);
 }
 
+function updateUserValidation(updateData){
+    const regexpw= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+    const regexmail= /[^@]+@[^\.]+\..+/;
+    const schema = Joi.object({
+        newUsername: Joi.string().min(6).max(20),
+        newEmail: Joi.string().min(7).max(100).pattern(regexmail),
+        newName: Joi.string().min(2).max(100),
+        newSurname: Joi.string().min(2).max(100),
+        newPassword: Joi.string().min(6).pattern(regexpw),
+        repeatPassword: Joi.string().min(6).pattern(regexpw)
+    });
+    return schema.validate(updateData);
+}
+
+module.exports.updateUserValidation = updateUserValidation;
 module.exports.validateUser = authenticateUser;
 module.exports.registerUserValidation = registerUserValidation;

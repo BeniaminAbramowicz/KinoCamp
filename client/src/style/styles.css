@@ -1,3 +1,13 @@
+@keyframes fadein{
+    from{
+        opacity: 0;
+    }
+
+    to{
+        opacity: 1;
+    }
+}
+
 html, body{
     width: 100%;
     height: 100vh;
@@ -17,7 +27,7 @@ hr{
     width: 100%;
 }
 
-.screeningsContainer{
+.screenings-container{
     display: flex;
     justify-content: center;
     flex-direction: row;
@@ -25,7 +35,7 @@ hr{
     height: 100%;
 }
 
-.screeningsElement{
+.screenings-element{
     flex: 0 1 20%;
     width: 20%;
     height: 100%;
@@ -42,43 +52,43 @@ hr{
     color: rgba(255, 255, 255, 0.842);
 }
 
-.screeningsElement > h2{
+.screenings-element > h2{
     text-align: center;
 }
 
-#movieDescription{
+#movie-description{
     float: left;
     text-align: justify;
     width: 50%;
 }
 
-#mainInfo{
+#main-info{
     float:left;
     width: 50%;
 }
 
-#additionalInfo{
+#additional-info{
     clear: both;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 }
 
-#additionalInfo td{
+#additional-info td{
     width: 33%;
 }
 
-#additionalInfo td:first-child{
+#additional-info td:first-child{
     text-align: left;
 }
-#additionalInfo td:nth-child(2){
+#additional-info td:nth-child(2){
     text-align: center;
 }
 
-#additionalInfo td:nth-child(3){
+#additional-info td:nth-child(3){
     text-align: right;
 }
 
-#additionalInfo table{
+#additional-info table{
     width: 100%;
 }
 
@@ -122,7 +132,7 @@ hr{
     font-size: 1rem;
 }
 
-.register-form-requirement{
+.form-requirement{
     color: rgb(255, 215, 36);
 }
 
@@ -164,9 +174,9 @@ hr{
 .reservation-element{
     position: absolute;
     animation: fadein 1s;
-    top: 2rem;
+    top: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     margin: 1rem auto;
     transition: all 2s ease;
     border-style: solid;
@@ -282,12 +292,48 @@ hr{
     right: 5.5rem;
 }
 
-@keyframes fadein{
-    from{
-        opacity: 0;
-    }
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    color: white;
+    width: 40%;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem auto;
+    border-style: solid;
+    border-color:rgb(187, 112, 0);
+    background-color:  rgb(53, 68, 64);
+}
 
-    to{
-        opacity: 1;
-    }
+.edit-data-form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    border-style: solid;
+    color: white;
+    border-color:rgb(187, 112, 0);
+    padding: 1rem;
+}
+
+.edit-data-form input{
+    width: 100%;
+    border-radius: 5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    outline: none;
+}
+
+.edit-data-form label{
+    width: 100%;
+}
+
+#edit-data-form-error{
+    color: red;
+    font-size: 1rem;
+}
+
+#response-error{
+    text-align: center;
 }

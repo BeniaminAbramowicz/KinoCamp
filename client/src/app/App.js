@@ -16,7 +16,7 @@ function App() {
         <Route path="/screenings" exact component={ScreeningsPage} />
         <Route path="/registerpage" exact component={RegisterPage} />
         <Route path="/loginpage" exact component={LoginPage} />
-        <Route path="/logout" exact component={LoginPage} />
+        <Route path="/logout" />
         <Route path="/profile" exact component={ProfilePage} />
       </Switch>
     </Router>

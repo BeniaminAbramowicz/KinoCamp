@@ -45,23 +45,23 @@ class RegisterForm extends React.Component{
                 {this.props.errorMessage && <p id="register-form-error">{this.props.errorMessage}</p>}
                 <form onSubmit={this.handleSubmit}>
                     <label>
-                        Username <span className="register-form-requirement">(Must be at least 6 characters long)</span>:
+                        Username <span className="form-requirement">(Must be at least 6 characters long)</span>:
                         <input type="text" value={this.state.username} onChange={this.usernameChange} />
                     </label>
                     <label>
-                        Email <span className="register-form-requirement">(Must be at least 7 characters long)</span>:
+                        Email <span className="form-requirement">(Must be at least 7 characters long)</span>:
                         <input type="email" value={this.state.email} onChange={this.emailChange} />
                     </label>
                     <label>
-                        Name <span className="register-form-requirement">(Must be at least 2 characters long)</span>:
+                        Name <span className="form-requirement">(Must be at least 2 characters long)</span>:
                         <input type="text" value={this.state.name} onChange={this.nameChange} />
                     </label>
                     <label>
-                        Surname <span className="register-form-requirement">(Must be at least 2 characters long)</span>:
+                        Surname <span className="form-requirement">(Must be at least 2 characters long)</span>:
                         <input type="text" value={this.state.surname} onChange={this.surnameChange} />
                     </label>
                     <label>
-                        Password <span className="register-form-requirement">(Must be at least 6 characters long, contain at least one big letter, one small letter and a number)</span>:
+                        Password <span className="form-requirement">(Must be at least 6 characters long, contain at least one big letter, one small letter and a number)</span>:
                         <input type="password" value={this.state.password} onChange={this.passwordChange} />
                     </label>
                     <button type="submit" className="btn btn-primary" value="Register">Register</button>

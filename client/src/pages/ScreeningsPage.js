@@ -4,18 +4,21 @@ import ScreeningsComponent from '../components/ScreeningsComponent'
 
 class ScreeningsPage extends React.Component{
 
-    state = {screenings: [] };
+    state = { screenings: [], errorMessage: '' };
 
     componentDidMount = async () => {
-        const response = await apis.getAllScreenings();
-        this.setState({screenings: response.data});
+        await apis.getAllScreenings()
+        .then(res => {
+            this.setState({screenings: res.data});
+        })
+        .catch(err => {
+            this.setState({errorMessage: err.response.data});
+        })   
     }
 
     render(){
         return (
-            <div>
-                <ScreeningsComponent screeningsList={this.state.screenings}/>
-            </div>
+                <ScreeningsComponent screeningsList={this.state.screenings} errorMessage={this.state.errorMessage}/>
         )
     }
 }

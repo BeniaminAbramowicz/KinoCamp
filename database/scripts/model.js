@@ -31,7 +31,7 @@ const CinemaHallSchema = new mongoose.Schema({
 
 const CinemaHall = mongoose.model('CinemaHall', CinemaHallSchema);
 
-const Screening = mongoose.model('Screening',new mongoose.Schema({
+const Screening = mongoose.model('Screening', new mongoose.Schema({
     cinemaHall: CinemaHallSchema,
     movie: {
         type: mongoose.Schema.Types.ObjectId,
@@ -54,36 +54,36 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
 
 const User = mongoose.model('User', new mongoose.Schema({
     username:{
-        type:String,
+        type: String,
         required: true,
         minlength: 6,
-        maxlength:20,
+        maxlength: 20,
         unique: true
     },
     name:{
-        type:String,
+        type: String,
         required: true,
         minlength: 2,
         maxlength: 100
     },
     surname:{
-        type:String,
+        type: String,
         required: true,
         minlength: 2,
         maxlength: 100
     },
     email:{
-        type:String,
+        type: String,
         required: true,
         minlength: 7,
-        maxlength:100,
+        maxlength: 100,
         unique: true
     },
     password:{
-        type:String,
+        type: String,
         required: true,
         minlength: 6,
-        maxlength:1024,
+        maxlength: 1024,
     }
 }))
 

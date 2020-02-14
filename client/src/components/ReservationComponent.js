@@ -22,19 +22,19 @@ class ReservationWindow extends React.Component{
 
     render(){
         return (
-            <div key={this.id} className="reservation-element">
+            <div className="reservation-element">
                 <div id="close-button" onClick={this.props.closeDetails} className="close-reservation">X</div><span className="close-text">Close reservation window</span>
                 <div>
                     <h2>{this.movie.title}</h2>
                     <hr></hr>
-                    <div id="mainInfo">
+                    <div id="main-info">
                         <h6>Date: {this.date.day < 10 ? `0${this.date.day}` : this.date.day}.{this.date.month < 10 ? `0${this.date.month}` : this.date.month}.{this.date.year}</h6>
                         <h6>Time: {this.date.hours < 10 && this.date.hours !==0 ? `0${this.date.hours - 1}` : this.date.hours === 0 ? '23' : this.date.hours - 1}:{this.date.minutes < 10 ? `0${this.date.minutes}` : this.date.minutes}</h6>
                         <h6>Duration: {this.movie.runningTime} minutes</h6>
                         <h6>Cinema Hall: {this.cinemaHall.name}</h6>
                     </div>
-                    <div id="movieDescription">{this.movie.description}</div>
-                    <div id="additionalInfo">
+                    <div id="movie-description">{this.movie.description}</div>
+                    <div id="additional-info">
                         <table>
                             <tbody>
                                 <tr>

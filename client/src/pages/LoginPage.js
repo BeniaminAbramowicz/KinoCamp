@@ -9,8 +9,10 @@ class LoginPage extends React.Component{
     }
 
     handleSubmit = async (userData) =>{
-        await apis.loginUser(userData)
-        .catch(err => {
+        await apis.loginUser(userData).then((res) => {
+            alert(res.data.message);
+            this.props.history.push('/');
+        }).catch(err => {
             this.setState({errorMessage: err.response.data});
         })
     }

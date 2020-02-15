@@ -17,7 +17,8 @@ const Booking = mongoose.model('Booking',new mongoose.Schema({
         type: String,
         enum: ['active', 'cancelled', 'archived'],
         default: 'active'
-    }
+    },
+    qrcode: String
 }));
 
 const CinemaHallSchema = new mongoose.Schema({

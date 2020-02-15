@@ -4,6 +4,7 @@ const validation = require('./validation');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const secret = 'rr3r45r3534frety54645y45y45y4yy54';
+const qrcode = require('qrcode');
 
 Date.prototype.addHours = function(hours){
     this.setHours(this.getHours() + hours);
@@ -74,7 +75,7 @@ async function getUserById(req, res){
             await Model.User.findOne({_id: decoded.userId})
             .select({username: 1, email: 1, name: 1, surname: 1})
             .then((user) => {
-                return res.status(200).send(user);
+                return res.status(200).json(user);
             })
             .catch(err => {
                 console.log(err);
@@ -105,7 +106,7 @@ async function saveBooking(req, res){
             if(req.body.amountOfSeats === 0 || req.body.bookedSeats.length === 0){
                 return res.status(400).json({error: 'You have to reserve at least one seat'});
             }
-            await Model.Screening.findOne({_id: req.body.screening})
+            await Model.Screening.findOne({_id: req.body.screening}).populate('movie')
             .then(async (screening) => {
                 let finalPrice = 0;
                 if(req.body.amountOfSeats !== req.body.bookedSeats.length){
@@ -118,47 +119,53 @@ async function saveBooking(req, res){
                         return res.status(400).json({error: 'Seats are already reserved'});
                     }
                 }
-        
+                const uniqueCode = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
+                
                 const booking = new Model.Booking({
                     screening: req.body.screening,
                     user: decoded.userId,
                     totalPrice: finalPrice,
                     seats: req.body.bookedSeats,
+                    qrcode: uniqueCode
                 });
-                console.log(booking);
                 let userForEmail = '';
                 try {
-                    const test = await booking.save();
-                    console.log(test);
-                    userForEmail = await Model.User.findOne({_id: decoded.userId});
-                    console.log(userForEmail);
+                    await booking.save();
+                    userForEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
                 } catch(err) {
                     console.log(err);
                     return res.status(500).json({error: 'Server error'});
                 }
+                let qrImg = '';
+                await qrcode.toDataURL(uniqueCode)
+                .then(img => {
+                    qrImg = img;
+                })
+                .catch(err => {
+                    console.log(err);
+                    return res.status(500).json({error: 'Server error'});
+                })
 
                 async function main(){
-        
-                    let testAccount = await nodemailer.createTestAccount();
-        
                     let transporter = nodemailer.createTransport({
-                        host: "smtp.ethereal.email",
-                        port: 587,
-                        secure: false,
+                        service: "gmail",
                         auth: {
-                        user: testAccount.user,
-                        pass: testAccount.pass
+                        user: 'cclastproject@gmail.com',
+                        pass: 'CCproject45'
                         }
                     });
         
                     await transporter.sendMail({
-                        from: '"Cinema Booking App" <cinemabookingapp@example.com>',
-                        to: "example@example.com",
+                        from: 'cclastproject@gmail.com',
+                        to: userForEmail.email,
                         subject: "Reservation number " + res._id,
-                        html: "<h2> Movie: " + screening.movie.title + "</h2>"
-                        + "<h4>Date: " + screening.date + "</h4>" 
-                        + "<h4>Ticket(s) total price: " + finalPrice + "</h4>"
-                        + "<h4>Seats count: " + req.body.bookedSeats.length + "</h4>"
+                        html: `<h2>Movie: ${screening.movie.title}</h2>
+                        <h4>Date: ${screening.date}</h4> 
+                        <h4>Ticket(s) total price: ${finalPrice}</h4>
+                        <h4>Seats count: ${req.body.bookedSeats.length}</h4>`,
+                        attachments: [
+                            {path: qrImg}
+                        ]
                     });
                 }
                 main().catch(console.error);

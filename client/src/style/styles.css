@@ -178,7 +178,7 @@ hr{
     animation: fadein 1s;
     top: 0;
     width: 100%;
-    height: 100vh;
+    height: auto;
     margin: 1rem auto;
     transition: all 2s ease;
     border-style: solid;
@@ -186,6 +186,12 @@ hr{
     color: white;
     border-color: rgb(53, 68, 64);
     padding: 1rem;
+}
+
+.reservation-element > p{
+    color: rgb(229, 255, 0);
+    font-size: 1.2rem;
+    text-align: center;
 }
 
 .reservation-element.close-transition{
@@ -340,3 +346,25 @@ hr{
 #response-error{
     text-align: center;
 }
+
+.my-reservations-component{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: white;
+    width: 40%;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem auto;
+    border-style: solid;
+    border-color:rgb(187, 112, 0);
+    background-color:  rgb(53, 68, 64);
+}
+
+#reservation-info{
+    width: 100%;
+}
+
+/* #reservation-seats{
+    white-space: pre-wrap;
+} */

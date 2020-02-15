@@ -18,7 +18,7 @@ appRouting.use(session({
     secret: 'test',
     resave: false,
     saveUninitialized: true,
-    cookie: {maxAge: 1800000, httpOnly: true, sameSite: "strict", path: "/"}
+    cookie: {maxAge: 3600000, httpOnly: true, sameSite: "strict", path: "/"}
 }))
 
 db.on('error', console.error.bind(console, 'Database connection error: '));

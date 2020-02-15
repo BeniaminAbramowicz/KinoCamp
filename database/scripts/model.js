@@ -15,7 +15,7 @@ const Booking = mongoose.model('Booking',new mongoose.Schema({
     }],
     status:{
         type: String,
-        enum: ['active','canceled'],
+        enum: ['active', 'cancelled', 'archived'],
         default: 'active'
     }
 }));

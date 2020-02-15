@@ -38,6 +38,11 @@ class Links extends React.Component {
                     </ul>
                     <ul id="nav-logout" className="navbar-nav navbar-inner">
                         <li className="nav-item">
+                            <a href="/myreservations" className="nav-link">
+                                My Reservations
+                            </a>
+                        </li>
+                        <li className="nav-item">
                             <a href="/profile" className="nav-link">
                                 Profile
                             </a>

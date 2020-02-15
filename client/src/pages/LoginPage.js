@@ -13,7 +13,10 @@ class LoginPage extends React.Component{
             alert(res.data.message);
             this.props.history.push('/');
         }).catch(err => {
-            this.setState({errorMessage: err.response.data});
+            if(err.response){
+                console.log(err);
+                this.setState({errorMessage: err.response.data});
+            }
         })
     }
 

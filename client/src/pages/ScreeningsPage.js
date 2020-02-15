@@ -12,7 +12,10 @@ class ScreeningsPage extends React.Component{
             this.setState({screenings: res.data});
         })
         .catch(err => {
-            this.setState({errorMessage: err.response.data});
+            if(err.response){
+                console.log(err);
+                this.setState({errorMessage: err.response.data.error});
+            }
         })   
     }
 

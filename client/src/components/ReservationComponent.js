@@ -6,17 +6,25 @@ class ReservationWindow extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {errorMessage: ''};
         this.id = this.props.chosenReservation.id;
         this.date = this.props.chosenReservation.date;
         this.cinemaHall = this.props.chosenReservation.cinemaHall;
         this.movie = this.props.chosenReservation.movie;
     }
 
-    createReservation = async(totalPrice, reservedSeats, amountOfSeats) => {
-        const reservationData = {screening: this.id, user: '5e4189c656f06f42d8f51afc', totalPrice: totalPrice, bookedSeats: reservedSeats, amountOfSeats: amountOfSeats};
+    createReservation = async (totalPrice, reservedSeats, amountOfSeats) => {
+        const reservationData = {screening: this.id, totalPrice: totalPrice, bookedSeats: reservedSeats, amountOfSeats: amountOfSeats};
         await apis.createReservation(reservationData)
+        .then(res => {
+            alert(res.data.message);
+            this.props.history.push('/myreservations');
+        })
         .catch(err => {
-            console.log(err);
+            if(err.response){
+                console.log(err.response.data.error);
+                this.setState({errorMessage: err.response.data.error});
+            }
         })
     }
 
@@ -56,6 +64,7 @@ class ReservationWindow extends React.Component{
                     <div></div>
                 </div>
                 <hr></hr>
+                {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
                 <Rows createReservation={this.createReservation} cinemaHallLayout={this.cinemaHall.seats} seatPrice={this.cinemaHall.priceForSeats}/>
             </div>
         )

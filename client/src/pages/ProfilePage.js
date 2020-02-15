@@ -12,25 +12,31 @@ class Profile extends React.Component{
             this.setState({userData: res.data});
         })
         .catch(err => {
-            this.setState({profileError: err.response.data.error});
+            if(err.response){
+                console.log(err);
+                this.setState({profileError: err.response.data.error});
+                alert(this.state.profileError);
+                this.props.history.push('/loginpage');
+            }
         })
     }
 
     handleSubmit = async (editUserData) =>{
-        await apis.editUserData(editUserData)
+        await apis.editPassword(editUserData)
         .then(res => {
             alert(res.data.message);
             this.props.history.push('/profile');
         })
         .catch(err => {
-            console.log(err.response.data.error);
-            this.setState({editError: err.response.data.error});
+            if(err.response){
+                this.setState({editError: err.response.data.error});
+            }
         });   
     }
 
     render(){
         return(
-            this.state.profileError === '' ? <ProfileDataComponent errorMessage={this.state.editError} userData={this.state.userData} onSubmit={this.handleSubmit}/> : <h2 id="response-error">{this.state.profileError}</h2>
+            this.state.profileError === '' && <ProfileDataComponent errorMessage={this.state.editError} userData={this.state.userData} onSubmit={this.handleSubmit}/>
         )
     }
 }

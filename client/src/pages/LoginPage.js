@@ -4,8 +4,11 @@ import LoginComponent from '../components/LoginComponent'
 
 class LoginPage extends React.Component{
 
-    state = {
-        errorMessage: ''
+    constructor(props){
+        super(props);
+        this.state = {errorMessage: ''};
+
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit = async (userData) =>{

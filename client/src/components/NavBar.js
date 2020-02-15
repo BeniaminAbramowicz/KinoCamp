@@ -5,7 +5,7 @@ class NavBar extends Component {
     render() {
         return (
             <div>
-                <Links />
+                <Links/>
             </div>
         )
     }

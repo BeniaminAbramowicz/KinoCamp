@@ -6,11 +6,13 @@ import Logo from '../components/Logo'
 class Links extends React.Component {
 
     logoutFunction = async () =>{
-        apis.logoutUser()
+        await apis.logoutUser()
         .then(() => {
-            this.props.history.push('/');
+            window.localStorage.setItem('auth', false);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     render() {
@@ -36,7 +38,7 @@ class Links extends React.Component {
                             </a>
                         </li>
                     </ul>
-                    <ul id="nav-logout" className="navbar-nav navbar-inner">
+                    <ul id="nav-logout" className="navbar-nav navbar-inner"> 
                         <li className="nav-item">
                             <a href="/myreservations" className="nav-link">
                                 My Reservations
@@ -48,13 +50,13 @@ class Links extends React.Component {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a href="/loginpage" className="nav-link">
-                                Login
+                            <a href="/loginpage" className="nav-link" onClick={this.logoutFunction}>
+                                Logout
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a href="/" className="nav-link" onClick={this.logoutFunction}>
-                                Logout
+                            <a href="/loginpage" className="nav-link">
+                                Login
                             </a>
                         </li>
                     </ul>

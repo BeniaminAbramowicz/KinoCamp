@@ -1,5 +1,5 @@
 const Model =  require('./model');
-const bcrypt = require('bcrypt'), SALT_WORK_FACTOR = 10;
+const bcrypt = require('bcrypt');
 const validation = require('./validation');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
@@ -14,21 +14,6 @@ async function getUsersId(){
     const users = await Model.User.find()
     .select({_id_: 1});
     return users;
-}
-
-async function getUserById(req, res){
-    if(req.session.testing){
-        await Model.User.findOne({_id: jwt.decode(req.session.testing).userId})
-        .select({username: 1, email: 1, name: 1, surname: 1})
-        .then((user) => {
-            return res.status(200).send(user);
-        })
-        .catch(err => {
-            return res.status(500).send(err + " | Server failed to fetch data");
-        });
-    } else {
-        return res.status(401).json({error: 'You must be logged in to view profile'});
-    } 
 }
 
 async function getMoviesId(){
@@ -69,18 +54,31 @@ async function saveCinemaHall(cinemaHallObj){
     console.log(result);
 }
 
+async function getUserById(req, res){
+    if(req.session.testing){
+        await Model.User.findOne({_id: jwt.decode(req.session.testing).userId})
+        .select({username: 1, email: 1, name: 1, surname: 1})
+        .then((user) => {
+            return res.status(200).send(user);
+        })
+        .catch(err => {
+            return res.status(500).send(err + " | Server failed to fetch data");
+        });
+    } else {
+        return res.status(401).json({error: 'You must be logged in to view profile'});
+    } 
+}
+
 async function getScreenings(req, res){
     await Model.Screening.find().populate('movie')
     .then(screeningsList => {
         return res.status(200).json(screeningsList);
     }).catch(err => {
-        return res.status(500).json({errorMessage: err + " | There was an error when attempting to get data from the server"});
+        return res.status(500).json({errorMessage: 'There was an error when attempting to get data from the server'});
     });
-    
 }
 
 async function saveBooking(req, res){
-
     const screeningData = await Model.Screening.findOne({_id: req.body.screening});
     let finalPrice = 0;
     if(req.body.amountOfSeats !== req.body.bookedSeats.length){
@@ -136,7 +134,7 @@ async function saveBooking(req, res){
 
 async function saveUser(req, res){
     const validationError = validation.registerUserValidation(req.body);
-    if(validationError.hasOwnProperty("error")) return res.status(400).send(validationError.error.message);
+    if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
     const userByMail = await Model.User.findOne({email: req.body.email});
     if(userByMail) return res.status(400).send('User already registered');
     const userByNickname = await Model.User.findOne({username: req.body.username});
@@ -150,26 +148,32 @@ async function saveUser(req, res){
         password: req.body.password,
     })
 
-    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+    const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);      
     await user.save();
     return res.status(200).send();
 }
 
 async function loginUser(req, res){
-    await Model.User.findOne({username: req.body.username}, async function(err, user){
-        if(err){
-            console.log(err);
-            return res.status(500).send();
-        }
+    await Model.User.findOne({username: req.body.username})
+    .then(async (user) => {
         if(!user) return res.status(400).send('Username or password incorrect');
-        const checkPassword = await bcrypt.compare(lol, user.password);
 
-        if(!checkPassword) return res.status(400).send('Username or password incorrect');
-
-        const token = jwt.sign({username: req.body.username, userId: user._id}, secret, {expiresIn: "1h"});
-        req.session.testing = token;
-        return res.status(201).json({message: 'You have been logged in'});
+        await bcrypt.compare(req.body.password, user.password)
+        .then((isCorrect) => {
+            if(!isCorrect) return res.status(400).send('Username or password incorrect');
+            const token = jwt.sign({username: req.body.username, userId: user._id}, secret, {expiresIn: "1h"});
+            req.session.testing = token;
+            return res.status(201).json({message: 'You have been logged in'});
+        })
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({error: 'Server error'});
+        });  
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: 'Server error'});
     });
 }
 
@@ -179,7 +183,28 @@ async function logoutUser(req, res){
 }
 
 async function updateUserData(req, res){
-
+    const validationError = validation.updateUserValidation(req.body)
+    if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
+    if(req.body.repeatPassword !== req.body.newPassword) return res.status(400).json({error: 'Passwords in both fields do not match'})
+    await Model.User.findOne({_id: jwt.decode(req.session.testing).userId})
+    .then(async (user) => {
+        const salt = await bcrypt.genSalt(10);
+        if(!salt) return res.status(500).json({error: 'Server error'});
+        const newHashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+        if(!newHashedPassword) return res.status(500).json({error: 'Server error'});
+        user.password = newHashedPassword;
+        try {
+            await user.save();
+            return res.status(200).json({message: 'Password change successful'});
+        } catch {
+            console.log(err);
+            return res.status(500).json({error: 'Server error'});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).send('Server error');
+    });
 }
 
 exports.getUserById = getUserById;

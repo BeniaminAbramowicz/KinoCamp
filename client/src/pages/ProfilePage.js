@@ -23,6 +23,7 @@ class Profile extends React.Component{
             this.props.history.push('/profile');
         })
         .catch(err => {
+            console.log(err.response.data.error);
             this.setState({editError: err.response.data.error});
         });   
     }

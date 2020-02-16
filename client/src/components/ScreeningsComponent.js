@@ -35,7 +35,7 @@ const ScreeningsToRender = props =>{
                 <div className="screening-info">
                     <h2>{movie.title}</h2>
                     <hr></hr>
-                    <h6>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month}` : month}.{year}</h6>
+                    <h6>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month + 1}` : month + 1}.{year}</h6>
                     <h6>Time: {hours < 10 && hours !==0 ? `0${hours - 1}` : hours === 0 ? '23' : hours - 1}:{minutes < 10 ? `0${minutes}` : minutes}</h6>
                 </div>
             </div>

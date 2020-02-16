@@ -7,6 +7,7 @@ class ScreeningsPage extends React.Component{
     state = { screenings: [], errorMessage: '' };
 
     componentDidMount = async () => {
+        
         await apis.getAllScreenings()
         .then(res => {
             this.setState({screenings: res.data});
@@ -21,7 +22,7 @@ class ScreeningsPage extends React.Component{
 
     render(){
         return (
-                <ScreeningsComponent screeningsList={this.state.screenings} errorMessage={this.state.errorMessage}/>
+            <ScreeningsComponent screeningsList={this.state.screenings} errorMessage={this.state.errorMessage}/>
         )
     }
 }

@@ -88,7 +88,9 @@ async function getUserById(req, res){
 }
 
 async function getScreenings(req, res){
-    await Model.Screening.find().populate('movie')
+    const dateNow = new Date().toISOString().split('T')[0];
+    const dateMonthAfter = new Date(new Date().setDate(new Date().getDate()+10)).toISOString().split('T')[0];
+    await Model.Screening.find({date: {$gte: dateNow, $lt: dateMonthAfter}}).populate('movie')
     .then(screeningsList => {
         return res.status(200).json(screeningsList);
     }).catch(err => {

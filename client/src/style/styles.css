@@ -114,6 +114,12 @@ hr{
     border-color: rgb(187, 112, 0);
 }
 
+.screenings-element:hover{
+    border-width: 1rem;
+    border-radius: 2rem;
+    border-color: green;
+}
+
 .screening-info{
     height: 1auto;
     padding: 0.5rem;
@@ -514,3 +520,13 @@ hr{
     text-align: center;
 }
 
+.screenings-main-page{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.screenings-dates{
+    padding: 1rem;
+    width: 40%;
+}

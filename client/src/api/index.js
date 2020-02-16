@@ -15,7 +15,8 @@ const getUserProfile = () => api.get('/profile');
 const editPassword = (data) => api.put('/edituser', data);
 const getUserReservations = () => api.post('/myreservations');
 const cancelReservation = (data) => api.put('/cancelreservation', data);
+const hasSessionExpired = () => api.get('/checksession');
 
-const apis = { cancelReservation, getUserReservations, editPassword, getUserProfile, getAllScreenings, registerNewUser, loginUser, logoutUser, createReservation};
+const apis = { hasSessionExpired, cancelReservation, getUserReservations, editPassword, getUserProfile, getAllScreenings, registerNewUser, loginUser, logoutUser, createReservation};
 
 export default apis

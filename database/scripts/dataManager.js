@@ -103,7 +103,7 @@ async function saveBooking(req, res){
     if(req.session.testing){
         jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
-                return res.status(500).json({error: 'Server error'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
             }
             if(req.body.amountOfSeats === 0 || req.body.bookedSeats.length === 0){
                 return res.status(400).json({error: 'You have to reserve at least one seat'});
@@ -293,7 +293,7 @@ async function loginUser(req, res){
         await bcrypt.compare(req.body.password, user.password)
         .then((isCorrect) => {
             if(!isCorrect) return res.status(400).send('Username or password incorrect');
-            const token = jwt.sign({username: req.body.username, userId: user._id}, hashSecret, {expiresIn: '1h'});
+            const token = jwt.sign({username: req.body.username, userId: user._id}, hashSecret, {expiresIn: 10});
             req.session.testing = token;
             return res.status(201).json({message: 'You have been logged in'});
         })
@@ -317,7 +317,7 @@ async function updatePassword(req, res){
     if(req.session.testing){
         jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
-                return res.status(500).json({error: 'Server error'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
             }
             await Model.User.findOne({_id: decoded.userId})
             .then(async (user) => {
@@ -346,6 +346,14 @@ async function updatePassword(req, res){
         return res.status(401).json({error: 'You must be logged in to update password'});
     } 
 }
+
+// async function(req, res){
+//     if(req.session.testing){
+//         jwt.verify(req.session.testing, hashSecret, function(err, decoded){
+
+//         });
+//     }
+// }
 
 exports.cancelReservation = cancelReservation;
 exports.getUserReservations = getUserReservations;

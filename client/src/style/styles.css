@@ -479,3 +479,12 @@ hr{
     animation: 1.5s ease-out 0s 1 github;
 }
 
+#not-found-message{
+    color: rgb(221, 221, 0)
+}
+
+.not-found-container{
+    width: 100%;
+    text-align: center;
+}
+

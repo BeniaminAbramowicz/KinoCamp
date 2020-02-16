@@ -7,6 +7,7 @@ import LoginPage from '../pages/LoginPage'
 import ProfilePage from '../pages/ProfilePage'
 import MainPage from '../pages/MainPage'
 import MyReservationsPage from '../pages/MyReservationsPage'
+import NotFoundPage from '../pages/NotFoundPage'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -24,6 +25,7 @@ class App extends React.Component{
         <Route path="/logout" />
         <Route path="/profile" exact component={ProfilePage} />
         <Route path="/myreservations" exact component={MyReservationsPage} />
+        <Route exact component={NotFoundPage} />
       </Switch>
     </Router>
   );

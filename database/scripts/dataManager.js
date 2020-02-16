@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const validation = require('./validation');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const secret = 'rr3r45r3534frety54645y45y45y4yy54';
+const hashSecret = process.env.HASH_SECRET;
 const qrcode = require('qrcode');
 
 Date.prototype.addHours = function(hours){
@@ -67,7 +67,7 @@ async function saveCinemaHall(cinemaHallObj){
 
 async function getUserById(req, res){
     if(req.session.testing){
-        jwt.verify(req.session.testing, secret, async function(err, decoded){
+        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -99,7 +99,7 @@ async function getScreenings(req, res){
 
 async function saveBooking(req, res){
     if(req.session.testing){
-        jwt.verify(req.session.testing, secret, async function(err, decoded){
+        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
                 return res.status(500).json({error: 'Server error'});
             }
@@ -184,7 +184,7 @@ async function saveBooking(req, res){
 
 async function getUserReservations(req, res){
     if(req.session.testing){
-        jwt.verify(req.session.testing, secret, async function(err, decoded){
+        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -231,7 +231,7 @@ async function getUserReservations(req, res){
 
 async function cancelReservation(req, res){
     if(req.session.testing){
-        jwt.verify(req.session.testing, secret, async function(err, decoded){
+        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -291,7 +291,7 @@ async function loginUser(req, res){
         await bcrypt.compare(req.body.password, user.password)
         .then((isCorrect) => {
             if(!isCorrect) return res.status(400).send('Username or password incorrect');
-            const token = jwt.sign({username: req.body.username, userId: user._id}, secret, {expiresIn: '1h'});
+            const token = jwt.sign({username: req.body.username, userId: user._id}, hashSecret, {expiresIn: '1h'});
             req.session.testing = token;
             return res.status(201).json({message: 'You have been logged in'});
         })
@@ -313,7 +313,7 @@ async function logoutUser(req, res){
 
 async function updatePassword(req, res){
     if(req.session.testing){
-        jwt.verify(req.session.testing, secret, async function(err, decoded){
+        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
             if(err) {
                 return res.status(500).json({error: 'Server error'});
             }

@@ -14,8 +14,9 @@ appRouting.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
+const sessionSecret = process.env.SESSION_SECRET;
 appRouting.use(session({
-    secret: 'test',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {maxAge: 3600000, httpOnly: true, sameSite: "strict", path: "/"}
@@ -26,4 +27,5 @@ db.on('error', console.error.bind(console, 'Database connection error: '));
 appRouting.get('/');
 appRouting.use('/api', routing);
 
-appRouting.listen(3001, () => console.log('Express.js routing server is running'));
+const port = process.env.PORT;
+appRouting.listen(port, () => console.log('Express.js routing server is running on port ' + port));

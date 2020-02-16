@@ -1,31 +1,38 @@
 const mongoose = require('mongoose');
 
 const Booking = mongoose.model('Booking',new mongoose.Schema({
-    screeningId: mongoose.Schema.Types.ObjectId,
-    userId: mongoose.Schema.Types.ObjectId,
+    screening: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Screening'},
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    totalPrice: Number,
     seats:[{
-        row:Number,
-        seat:Number
+        row: Number,
+        seat: Number
     }],
     status:{
         type: String,
-        enum:['active','canceled'],
+        enum: ['active', 'cancelled', 'archived'],
         default: 'active'
-    }
+    },
+    qrcode: String
 }));
 
 const CinemaHallSchema = new mongoose.Schema({
     name:{
-        type:String,
-        enum:['A','B']
+        type: String,
+        enum: ['A','B']
     },
     seats: [[Boolean]],
-    prizeForSeats: Number
+    priceForSeats: Number
 });
 
 const CinemaHall = mongoose.model('CinemaHall', CinemaHallSchema);
 
-const Screening = mongoose.model('Screening',new mongoose.Schema({
+const Screening = mongoose.model('Screening', new mongoose.Schema({
     cinemaHall: CinemaHallSchema,
     movie: {
         type: mongoose.Schema.Types.ObjectId,
@@ -38,32 +45,46 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
     genre: String,
     runningTime: Number,
     description: String,
-    director:String,
+    director: String,
     ageRestriction:{
         type: String,
         enum: ['G', 'PG', 'PG-13', 'R', 'NC-17']
-    }
+    },
+    picture: String
 }));
 
 const User = mongoose.model('User', new mongoose.Schema({
     username:{
-        type:String,
+        type: String,
         required: true,
         minlength: 6,
-        maxlength:20
+        maxlength: 20,
+        unique: true
+    },
+    name:{
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 100
+    },
+    surname:{
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 100
     },
     email:{
-        type:String,
+        type: String,
         required: true,
-        minlength: 6,
-        maxlength:100,
-        unique:true
+        minlength: 7,
+        maxlength: 100,
+        unique: true
     },
     password:{
-        type:String,
+        type: String,
         required: true,
         minlength: 6,
-        maxlength:1024,
+        maxlength: 1024,
     }
 }))
 

@@ -1,6 +1,22 @@
 import React from 'react'
+import ReservationComponent from './ReservationComponent'
 
 const ScreeningsToRender = props =>{
+    const [modalOpened, setModalOpened] = React.useState(false);
+    const [chosenScreening, setChosenScreening] = React.useState();
+
+    const openDetails = (id, date, cinemaHall, movie) => {
+        let screeningToDisplay = {id: id, date: date, cinemaHall: cinemaHall, movie: movie};
+        setChosenScreening(screeningToDisplay);
+        setModalOpened(true);
+    }
+
+    const closeDetails = () => {
+        const resWindow = document.getElementsByClassName('reservation-element')[0];
+        resWindow.classList.add('close-transition');
+        setTimeout(() => {setModalOpened(false)}, 270);  
+    }
+
     const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}) => {
         
         let theDate = new Date(date);
@@ -9,36 +25,23 @@ const ScreeningsToRender = props =>{
         let hours = theDate.getHours();
         let year = theDate.getFullYear();
         let minutes = theDate.getMinutes();
+        let dateToPass = {day: day, month: month, year: year, hours: hours, minutes: minutes};
 
         return (
-            <div key={_id} className="screeningsElement">
-                <h2>{movie.title}</h2>
-                <hr></hr>
-                <div id="mainInfo">
-                    <h6>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month}` : month}.{year}</h6>
+            <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screenings-element">
+                <div className="movie-image">
+                    <img src={require(`../images/${movie.picture}`)} width="100%" height="auto" alt="spiderman-poster"/>
+                </div>
+                <div className="screening-info">
+                    <h2>{movie.title}</h2>
+                    <hr></hr>
+                    <h6>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month + 1}` : month + 1}.{year}</h6>
                     <h6>Time: {hours < 10 && hours !==0 ? `0${hours - 1}` : hours === 0 ? '23' : hours - 1}:{minutes < 10 ? `0${minutes}` : minutes}</h6>
-                    <h6>Duration: {movie.runningTime} minutes</h6>
-                    <h6>Cinema Hall: {cinemaHall.name}</h6>
-                </div>
-                <div id="movieDescription">{movie.description}</div>
-                <div id="additionalInfo">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>{movie.ageRestriction}</td>
-                                <td>Genre: {movie.genre}</td>
-                                <td>Director: {movie.director}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="reservation">
-                    <button className="makeReservation">Make reservation</button>
                 </div>
             </div>
         );
     });
-    return <div className="screeningsContainer">{scrs}</div>
+    return <div className="screenings-container">{scrs}{modalOpened ? <ReservationComponent chosenReservation={chosenScreening} closeDetails={closeDetails} /> : null}</div>
 }
 
 export default ScreeningsToRender

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "React/Node application with main functionalities: - displaying screenings schedule - booking seats for a movie - displaying movies list",
   "scripts": {
+    "start": "nodemon expresscfg.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,12 +17,17 @@
   },
   "homepage": "https://github.com/BeniaminAbramowicz/KinoCamp#readme",
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.11",
-    "nodemon": "^2.0.2"
+    "nodemailer": "^6.4.2",
+    "nodemon": "^2.0.2",
+    "qrcode": "^1.4.4"
   }
 }

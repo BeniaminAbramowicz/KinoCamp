@@ -4,19 +4,29 @@ const cors = require('cors');
 const appRouting = express();
 const db = require('./databasecfg');
 const routing = require('./routing');
-var session = require('express-session')
-const cont = require('./database/scripts/dataManager')
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 appRouting.use(bodyParser.urlencoded({extended: true}));
-appRouting.use(cors());
 appRouting.use(bodyParser.json());
-appRouting.use(session({secret:'qwertyuiop', resave: false, saveUninitialized: true}));
+appRouting.use(cookieParser());
+appRouting.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
+const sessionSecret = process.env.SESSION_SECRET;
+appRouting.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {maxAge: 3600000, httpOnly: true, sameSite: "strict", path: "/"}
+}))
 
 db.on('error', console.error.bind(console, 'Database connection error: '));
 
-appRouting.get('/', (req, res) => {
-    res.send('Main page');
-});
-
+appRouting.get('/');
 appRouting.use('/api', routing);
-appRouting.listen(3001, () => console.log('Express.js routing server is running'));
+
+const port = process.env.PORT;
+appRouting.listen(port, () => console.log('Express.js routing server is running on port ' + port));

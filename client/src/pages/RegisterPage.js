@@ -4,12 +4,20 @@ import RegisterComponent from '../components/RegisterComponent'
 
 class RegisterPage extends React.Component{
 
-    state = {
-        errorMessage: ''
-    }
+    state = {errorMessage: ''}
 
-    handleSubmit(data){
-        apis.registerNewUser(data).catch(err => this.setState({errorMessage: err}));
+    handleSubmit = async (userData) =>{
+        await apis.registerNewUser(userData)
+        .then(res => {
+            alert(res.data.message);
+            this.props.history.push('/loginpage');
+        })
+        .catch(err => {
+            if(err.response){
+                console.log(err);
+                this.setState({errorMessage: err.response.data.error});
+            }
+        })   
     }
     
     render(){

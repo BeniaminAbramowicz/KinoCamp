@@ -1,17 +1,3 @@
-[
-    {
-        "name": "Jan Kowalski",
-        "email": "JanKowalski@gmail.com",
-        "password": "123456"
-    },
-    {
-        "name": "Maria Nowak",
-        "email": "MariaNowak@gmail.com",
-        "password": "123456"
-    },
-    {
-        "name": "Janusz Polak",
-        "email": "JanuszPolak@gmail.com",
-        "password": "123456"
-    }
-]
+[{"username": "JKowal","name": "Jan","surname": "Kowalski","email": "JanKowalski@gmail.com","password": "$2b$10$TCMHtHkkKi7Diyl/tts3qOAKMoHRgBnoDYz4jS0zbW/OQbecf3aTi"},
+{"username": "MNowak","name": "Maria","surname": "Nowak","email": "MariaNowak@gmail.com","password": "$2b$10$KPmq.x.KPWiU33WS6u5YROppW627aZTAy6TIpKX7KBKSnxnb19hsS"},
+{"username": "JPolak","name": "Janusz","surname": "Polak","email": "JanuszPolak@gmail.com","password": "$2b$10$WvSRFpVk8bjUSzjS34qzye4AXtWycqSKHlR19TB4MuM6Rja8plNs2"}]

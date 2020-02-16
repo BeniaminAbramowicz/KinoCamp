@@ -8,14 +8,14 @@ class RegisterPage extends React.Component{
 
     handleSubmit = async (userData) =>{
         await apis.registerNewUser(userData)
-        .then((res) => {
-            alert(res.body.message);
+        .then(res => {
+            alert(res.data.message);
             this.props.history.push('/loginpage');
         })
         .catch(err => {
             if(err.response){
                 console.log(err);
-                this.setState({errorMessage: err.response.data});
+                this.setState({errorMessage: err.response.data.error});
             }
         })   
     }

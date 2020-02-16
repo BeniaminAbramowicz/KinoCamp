@@ -8,21 +8,20 @@ class Links extends React.Component {
     constructor(){
         super();
 
-        this.state = {test: window.localStorage.getItem('auth')};
-        console.log(this.state.test);
+        this.state = {auth: window.localStorage.getItem('auth')};
     }
 
     logoutFunction = async () =>{
         await apis.logoutUser()
         .then(() => {
             window.localStorage.setItem('auth', false);
-            this.setState({test: false});
+            this.setState({auth: false});
         })
         .catch(err => {
             console.log(err);
         });
     }
-    
+
     render() {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark main-navbar">
@@ -40,7 +39,7 @@ class Links extends React.Component {
                                 Screenings
                             </a>
                         </li>
-                        {this.state.test === 'false' ?
+                        {this.state.auth === 'false' ?
                         <li className="nav-item">
                             <a href="/registerpage" className="nav-link">
                                 Register
@@ -48,25 +47,25 @@ class Links extends React.Component {
                         </li> : null}
                     </ul>
                     <ul id="nav-logout" className="navbar-nav navbar-inner"> 
-                        {this.state.test === 'true' ?
+                        {this.state.auth === 'true' ?
                         <li className="nav-item">
                             <a href="/myreservations" className="nav-link">
                                 My Reservations
                             </a>
                         </li> : null}
-                        {this.state.test === 'true' ?
+                        {this.state.auth === 'true' ?
                         <li className="nav-item">
                             <a href="/profile" className="nav-link">
                                 Profile
                             </a>
                         </li> : null}
-                        {this.state.test === 'true' ?
+                        {this.state.auth === 'true' ?
                         <li className="nav-item">
                             <a href="/loginpage" className="nav-link" onClick={this.logoutFunction}>
                                 Logout
                             </a>
                         </li> : null}
-                        {this.state.test === 'false' ?
+                        {this.state.auth === 'false' ?
                         <li className="nav-item">
                             <a href="/loginpage" className="nav-link">
                                 Login

@@ -19,7 +19,7 @@ class LoginPage extends React.Component{
         }).catch(err => {
             if(err.response){
                 console.log(err);
-                this.setState({errorMessage: err.response.data});
+                this.setState({errorMessage: err.response.data.error});
             }
         })
     }

@@ -66,8 +66,8 @@ async function saveCinemaHall(cinemaHallObj){
 }
 
 async function getUserById(req, res){
-    if(req.session.testing){
-        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
+    if(req.session.token){
+        jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -100,8 +100,8 @@ async function getScreenings(req, res){
 }
 
 async function saveBooking(req, res){
-    if(req.session.testing){
-        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
+    if(req.session.token){
+        jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
             }
@@ -185,8 +185,8 @@ async function saveBooking(req, res){
 }
 
 async function getUserReservations(req, res){
-    if(req.session.testing){
-        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
+    if(req.session.token){
+        jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -232,8 +232,8 @@ async function getUserReservations(req, res){
 }
 
 async function cancelReservation(req, res){
-    if(req.session.testing){
-        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
+    if(req.session.token){
+        jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
@@ -266,10 +266,17 @@ async function cancelReservation(req, res){
 async function saveUser(req, res){
     const validationError = validation.registerUserValidation(req.body);
     if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
-    const userByMail = await Model.User.findOne({email: req.body.email});
-    if(userByMail) return res.status(400).send('User already registered');
-    const userByNickname = await Model.User.findOne({username: req.body.username});
-    if(userByNickname) return res.status(400).send('User already registered');
+    let userByMail = '';
+    let userByNickname = '';
+    try {
+        userByMail = await Model.User.findOne({email: req.body.email});
+        userByNickname = await Model.User.findOne({username: req.body.username});
+    } catch(err) {
+        console.log(err);
+        return res.status(500).json({error: 'Server error'});
+    }
+    if(userByMail) return res.status(400).json({error: 'User already registered'});
+    if(userByNickname) return res.status(400).json({error: 'User already registered'});
 
     const user = new Model.User({
         username: req.body.username,
@@ -278,23 +285,27 @@ async function saveUser(req, res){
         surname: req.body.surname,
         password: req.body.password,
     })
-
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);      
-    await user.save();
+    let salt = '';
+    try {
+        salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);   
+        await user.save();
+    } catch(err) {
+        console.log(err);
+        return res.status(500).json({error: 'Server error'});
+    }
     return res.status(200).json({message: 'You\'ve created new account. Now you can log in'});
 }
 
 async function loginUser(req, res){
     await Model.User.findOne({username: req.body.username})
     .then(async (user) => {
-        if(!user) return res.status(400).send('Username or password incorrect');
-
+        if(!user) return res.status(400).json({error: 'Username or password incorrect'});
         await bcrypt.compare(req.body.password, user.password)
         .then((isCorrect) => {
-            if(!isCorrect) return res.status(400).send('Username or password incorrect');
-            const token = jwt.sign({username: req.body.username, userId: user._id}, hashSecret, {expiresIn: 10});
-            req.session.testing = token;
+            if(!isCorrect) return res.status(400).json({error: 'Username or password incorrect'});
+            const token = jwt.sign({username: req.body.username, userId: user._id}, hashSecret, {expiresIn: '1h'});
+            req.session.token = token;
             return res.status(201).json({message: 'You have been logged in'});
         })
         .catch(err => {
@@ -314,8 +325,8 @@ async function logoutUser(req, res){
 }
 
 async function updatePassword(req, res){
-    if(req.session.testing){
-        jwt.verify(req.session.testing, hashSecret, async function(err, decoded){
+    if(req.session.token){
+        jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
             }
@@ -346,14 +357,6 @@ async function updatePassword(req, res){
         return res.status(401).json({error: 'You must be logged in to update password'});
     } 
 }
-
-// async function(req, res){
-//     if(req.session.testing){
-//         jwt.verify(req.session.testing, hashSecret, function(err, decoded){
-
-//         });
-//     }
-// }
 
 exports.cancelReservation = cancelReservation;
 exports.getUserReservations = getUserReservations;

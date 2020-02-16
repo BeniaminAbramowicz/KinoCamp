@@ -13,25 +13,18 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 class App extends React.Component{
-
-  componentDidMount = async () => {
-    apis.hasSessionExpired()
-    .then()
-    .catch();
-  }
-
   render() {
   return(
     <Router>
       <NavBar/>
       <Switch>
         <Route path="/" exact component={MainPage} />
-        <Route path="/screenings" exact component={ScreeningsPage} />
-        <Route path="/registerpage" exact component={RegisterPage} />
+        <Route path="/screenings" exact component={ScreeningsPage}/>
+        <Route path="/registerpage" exact component={RegisterPage}/>
         <Route path="/loginpage" exact component={LoginPage}/>
         <Route path="/logout" />
-        <Route path="/profile" exact component={ProfilePage} />
-        <Route path="/myreservations" exact component={MyReservationsPage} />
+        <Route path="/profile" exact component={ProfilePage}/>
+        <Route path="/myreservations" exact component={MyReservationsPage}/>
         <Route exact component={NotFoundPage} />
       </Switch>
     </Router>

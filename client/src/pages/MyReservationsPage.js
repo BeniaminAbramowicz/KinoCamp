@@ -19,7 +19,7 @@ class MyReservations extends React.Component{
             if(err.response){
                 this.setState({errorMessage: err.response.data.error});
                 alert(this.state.errorMessage);
-                this.props.history.push('/loginpage');
+                window.location.replace('/loginpage');
             }
         });
     }

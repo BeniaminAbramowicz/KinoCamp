@@ -16,7 +16,7 @@ class Profile extends React.Component{
                 console.log(err);
                 this.setState({profileError: err.response.data.error});
                 alert(this.state.profileError);
-                this.props.history.push('/loginpage');
+                window.location.replace('/loginpage');
             }
         })
     }

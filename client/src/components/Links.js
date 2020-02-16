@@ -5,16 +5,24 @@ import Logo from '../components/Logo'
 
 class Links extends React.Component {
 
+    constructor(){
+        super();
+
+        this.state = {test: window.localStorage.getItem('auth')};
+        console.log(this.state.test);
+    }
+
     logoutFunction = async () =>{
         await apis.logoutUser()
         .then(() => {
             window.localStorage.setItem('auth', false);
+            this.setState({test: false});
         })
         .catch(err => {
             console.log(err);
         });
     }
-
+    
     render() {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark main-navbar">
@@ -32,33 +40,38 @@ class Links extends React.Component {
                                 Screenings
                             </a>
                         </li>
+                        {this.state.test === 'false' ?
                         <li className="nav-item">
                             <a href="/registerpage" className="nav-link">
                                 Register
                             </a>
-                        </li>
+                        </li> : null}
                     </ul>
                     <ul id="nav-logout" className="navbar-nav navbar-inner"> 
+                        {this.state.test === 'true' ?
                         <li className="nav-item">
                             <a href="/myreservations" className="nav-link">
                                 My Reservations
                             </a>
-                        </li>
+                        </li> : null}
+                        {this.state.test === 'true' ?
                         <li className="nav-item">
                             <a href="/profile" className="nav-link">
                                 Profile
                             </a>
-                        </li>
+                        </li> : null}
+                        {this.state.test === 'true' ?
                         <li className="nav-item">
                             <a href="/loginpage" className="nav-link" onClick={this.logoutFunction}>
                                 Logout
                             </a>
-                        </li>
+                        </li> : null}
+                        {this.state.test === 'false' ?
                         <li className="nav-item">
                             <a href="/loginpage" className="nav-link">
                                 Login
                             </a>
-                        </li>
+                        </li> : null}
                     </ul>
                 </div>
             </nav>

@@ -13,8 +13,9 @@ class LoginPage extends React.Component{
 
     handleSubmit = async (userData) =>{
         await apis.loginUser(userData).then((res) => {
+            window.localStorage.setItem('auth', true);
             alert(res.data.message);
-            this.props.history.push('/');
+            window.location.replace('/');
         }).catch(err => {
             if(err.response){
                 console.log(err);

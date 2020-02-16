@@ -436,9 +436,10 @@ hr{
     display: flex;
     width: 100%;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     text-align: center;
     color: rgb(221, 221, 0);
+    overflow: hidden;
 }
 
 .main-page-container > h1{
@@ -448,35 +449,60 @@ hr{
 .main-page-images{
     display: flex;
     flex-wrap: wrap;
-    height: 50%;
+    height: 100%;
 }
 
-.main-page-images > img{
+.main-page-images > div{
     flex: 0 0 33%;
 }
 
-.main-page-images > img:first-child{
+.main-page-images > div > img{
+    width: 100%;
+    height: auto;
+}
+
+.main-page-images > div:first-child{
     animation: 1.5s ease-out 0s 1 node;
+    height: auto;
+    padding: 4rem;
 }
 
-.main-page-images > img:nth-child(2){
+.main-page-images > div:nth-child(2){
     animation: 1.5s ease-out 0s 1 express;
+    position: relative;
+    top: 6rem;
+    height: auto;
+    padding: 4rem;
 }
 
-.main-page-images > img:nth-child(3){
+.main-page-images > div:nth-child(3){
     animation: 1.5s ease-out 0s 1 js;
+    position: relative;
+    top: -1rem;
+    height: auto;
+    padding: 4rem;
 }
 
-.main-page-images > img:nth-child(4){
+.main-page-images > div:nth-child(4){
     animation: 1.5s ease-out 0s 1 mongo;
+    position: relative;
+    bottom: -2.5rem;
+    height: 100%;
+    padding: 4rem;
 }
 
-.main-page-images > img:nth-child(5){
+.main-page-images > div:nth-child(5){
     animation: 1.5s ease-out 0s 1 react;
+    height: 100%;
+    padding: 4rem;
 }
 
-.main-page-images > img:nth-child(6){
+.main-page-images > div:nth-child(6){
     animation: 1.5s ease-out 0s 1 github;
+    position: relative;
+    bottom: 2rem;
+    height: 100%;
+    padding: 4rem;
 }
 
 #not-found-message{

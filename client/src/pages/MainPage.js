@@ -9,12 +9,12 @@ class MainPage extends React.Component{
                 <br /><br />
                 <h1>We used these technologies/programming languages/libraries for our project</h1>
                 <div className="main-page-images">
-                    <img src={require('../images/node.png')} width="200px" height="auto" alt="node"/>
-                    <img src={require('../images/express.png')} width="200px" height="auto" alt="express"/>
-                    <img src={require('../images/JS_logo.png')} width="200px" height="auto" alt="js"/>
-                    <img src={require('../images/mongodb.png')} width="200px" height="auto" alt="mongo"/>
-                    <img src={require('../images/react.png')} width="200px" height="auto" alt="react"/>
-                    <img src={require('../images/Github.png')} width="200px" height="auto" alt="github"/>
+                    <div><img src={require('../images/node.png')} alt="node"/></div>
+                    <div><img src={require('../images/express.png')} alt="express"/></div>
+                    <div><img src={require('../images/JS_logo.png')} alt="js"/></div>
+                    <div><img src={require('../images/mongodb.png')} alt="mongo"/></div>
+                    <div><img src={require('../images/react.png')} alt="react"/></div>
+                    <div><img src={require('../images/Github.png')} alt="github"/></div>
                 </div>        
             </div>
         )

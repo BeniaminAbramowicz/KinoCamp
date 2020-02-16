@@ -36,7 +36,7 @@ class Profile extends React.Component{
 
     render(){
         return(
-            this.state.profileError === '' && <ProfileDataComponent errorMessage={this.state.editError} userData={this.state.userData} onSubmit={this.handleSubmit}/>
+            this.state.profileError === '' && <div className="outer-profile-container"><ProfileDataComponent errorMessage={this.state.editError} userData={this.state.userData} onSubmit={this.handleSubmit}/></div>
         )
     }
 }

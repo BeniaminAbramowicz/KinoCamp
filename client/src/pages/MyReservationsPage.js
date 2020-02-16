@@ -31,12 +31,14 @@ class MyReservations extends React.Component{
     render(){
         return(
             <div className="my-reservations-component">
-                <select onChange={this.handleChange} className="form-control">
-                    <option value="active">Active</option>
-                    <option value="cancelled">Cancelled</option>
-                    <option value="archived">Archived</option>
-                </select>
-                <MyReservationsComponent reservationsType={this.state.reservationsType} reservationsData={this.state.reservationsData}/>
+                <div className="inner-reservations-component">
+                    <select onChange={this.handleChange} className="form-control">
+                        <option value="active">Active</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <MyReservationsComponent reservationsType={this.state.reservationsType} reservationsData={this.state.reservationsData}/>
+                </div>
             </div>
         )
     }

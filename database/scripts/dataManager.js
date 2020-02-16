@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const hashSecret = process.env.HASH_SECRET;
 const qrcode = require('qrcode');
+const nodemailerEmail = process.env.USER_EMAIL;
+const nodemailerPassword = process.env.USER_PASSWORD;
 
 Date.prototype.addHours = function(hours){
     this.setHours(this.getHours() + hours);
@@ -152,13 +154,13 @@ async function saveBooking(req, res){
                     let transporter = nodemailer.createTransport({
                         service: "gmail",
                         auth: {
-                        user: 'cclastproject@gmail.com',
-                        pass: 'CCproject45'
+                        user: nodemailerEmail,
+                        pass: nodemailerPassword
                         }
                     });
         
                     await transporter.sendMail({
-                        from: 'cclastproject@gmail.com',
+                        from: nodemailerEmail,
                         to: userForEmail.email,
                         subject: "Reservation number " + res._id,
                         html: `<h2>Movie: ${screening.movie.title}</h2>

@@ -6,6 +6,7 @@ const db = require('./databasecfg');
 const routing = require('./routing');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 appRouting.use(bodyParser.urlencoded({extended: true}));
 appRouting.use(bodyParser.json());

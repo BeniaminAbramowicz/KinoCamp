@@ -5,7 +5,6 @@ import ScreeningsPage from '../pages/ScreeningsPage';
 import RegisterPage from '../pages/RegisterPage'
 import LoginPage from '../pages/LoginPage'
 import ProfilePage from '../pages/ProfilePage'
-import apis from '../api/index'
 import MainPage from '../pages/MainPage'
 import MyReservationsPage from '../pages/MyReservationsPage'
 import NotFoundPage from '../pages/NotFoundPage'

@@ -55,17 +55,20 @@ class ReservationWindow extends React.Component{
                     </div>
                     <hr></hr>
                 </div>
-                <div id="reservation-legend">
-                    <span>Free seats</span>
-                    <div></div>
-                    <span>Reserved seats</span>
-                    <div></div>
-                    <span>Seats to be reserved by You</span>
-                    <div></div>
-                </div>
-                <hr></hr>
-                {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
-                <Rows createReservation={this.createReservation} cinemaHallLayout={this.cinemaHall.seats} seatPrice={this.cinemaHall.priceForSeats}/>
+                {window.localStorage.getItem('auth') === 'true' ?
+                <div>
+                    <div id="reservation-legend">
+                        <span>Free seats</span>
+                        <div></div>
+                        <span>Reserved seats</span>
+                        <div></div>
+                        <span>Seats to be reserved by You</span>
+                        <div></div>
+                    </div>
+                    <hr></hr>
+                    {this.state.errorMessage && <p>{this.state.errorMessage}</p>}
+                    <Rows createReservation={this.createReservation} cinemaHallLayout={this.cinemaHall.seats} seatPrice={this.cinemaHall.priceForSeats}/>
+                </div> : null}
             </div>
         )
     }

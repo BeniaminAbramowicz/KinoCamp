@@ -32,7 +32,7 @@ class ReservationWindow extends React.Component{
         return (
             <div className="reservation-element">
                 <div id="movie-title">
-                    <h2>{this.movie.title}</h2><div><div onClick={this.props.closeDetails} className="close-reservation">X</div></div>
+                    <h2>{this.movie.title}</h2><div onClick={this.props.closeDetails} className="close-reservation">X</div>
                 </div>
                 <div>
                     <hr></hr>

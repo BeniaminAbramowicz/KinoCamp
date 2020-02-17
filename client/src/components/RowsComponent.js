@@ -11,7 +11,7 @@ class Rows extends React.Component{
         this.reserveSeat = this.reserveSeat.bind(this);
         this.state = {numberOfSeats: 0};
     }
-
+    
     reserveSeat(st, event, row){
         if(event.target.className === "user-reserved-seat" && this.seatsToReserve.find(x => x.row === row && x.seat === st)){
             event.target.className = "free-seat";

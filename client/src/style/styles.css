@@ -395,7 +395,7 @@ hr{
     z-index: 1;
     transition: all 2s ease;
     border-style: solid;
-    background-color: rgba(53, 68, 64, 0.97);
+    background-color: rgba(53, 68, 64, 0.95);
     color: white;
     border-color: rgb(53, 68, 64);
     padding: 1rem;

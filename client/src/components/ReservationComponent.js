@@ -14,6 +14,7 @@ class ReservationWindow extends React.Component{
     }
 
     createReservation = async (totalPrice, reservedSeats, amountOfSeats) => {
+        console.log(reservedSeats);
         const reservationData = {screening: this.id, totalPrice: totalPrice, bookedSeats: reservedSeats, amountOfSeats: amountOfSeats};
         await apis.createReservation(reservationData)
         .then(res => {

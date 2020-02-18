@@ -95,8 +95,8 @@ async function getScreenings(req, res){
         loginFlag = false;
     }
     const dateNow = new Date().toISOString().split('T')[0];
-    const dateMonthAfter = new Date(new Date().setDate(new Date().getDate()+10)).toISOString().split('T')[0];
-    await Model.Screening.find({date: {$gte: dateNow, $lt: dateMonthAfter}}).populate('movie')
+    const tenDaysAfter = new Date(new Date().setDate(new Date().getDate()+10)).toISOString().split('T')[0];
+    await Model.Screening.find({date: {$gte: dateNow, $lt: tenDaysAfter}}).populate('movie')
     .then(screeningsList => {
         return res.status(200).json({screeningsList: screeningsList, loginFlag: loginFlag});
     }).catch(err => {
@@ -118,15 +118,26 @@ async function saveBooking(req, res){
             .then(async (screening) => {
                 let finalPrice = 0;
                 if(req.body.amountOfSeats !== req.body.bookedSeats.length){
-                    finalPrice = req.body.bookedSeats.length * screeningData.cinemaHall.priceForSeats;
+                    finalPrice = req.body.bookedSeats.length * screening.cinemaHall.priceForSeats;
                 } else {
                     finalPrice = req.body.totalPrice;
                 }
                 for(var i = 0; i < req.body.bookedSeats.length; i++){
                     if(screening.cinemaHall.seats[req.body.bookedSeats[i].row - 1][req.body.bookedSeats[i].seat - 1]){
-                        return res.status(400).json({error: 'Seats are already reserved'});
+                        return res.status(400).json({error: 'One or more of seats you\'ve choosen has been already reserved'});
                     }
                 }
+                for(var i = 0; i < req.body.bookedSeats.length; i++){
+                    screening.cinemaHall.seats[req.body.bookedSeats[i].row - 1][req.body.bookedSeats[i].seat - 1] = true;
+                }
+                screening.cinemaHall.markModified('seats');
+
+                try {
+                    await screening.save();
+                } catch(err) {
+                    return res.status(500).json({error: 'Server error'});
+                }                
+
                 const uniqueCode = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
                 
                 const booking = new Model.Booking({
@@ -211,7 +222,7 @@ async function getUserReservations(req, res){
             ])
             .then(reservationsList => {
                 let updatedList = reservationsList.map(reservation => {
-                    if(reservation.screening.date.getTime() < new Date().addHours(1).addMinutes(30).getTime()){
+                    if(reservation.screening.date < new Date().addHours(1).addMinutes(30)){
                         reservation.status = 'archived';
                         try {
                             async () => {
@@ -246,7 +257,7 @@ async function cancelReservation(req, res){
             }
             await Model.Booking.findOne({_id: req.body.reservationId, user: decoded.userId}).populate('screening')
             .then(async (reservation) => {
-                if(reservation.screening.date.getTime() - new Date().addHours(1).getTime() <= 1800000){
+                if(reservation.screening.date - new Date().addHours(1) <= 1800000){
                     return res.status(400).json({error: 'You can\'t cancel reservation less than 30 minutes before screening'});
                 }
                 reservation.status = 'cancelled';
@@ -339,22 +350,22 @@ async function updatePassword(req, res){
             }
             await Model.User.findOne({_id: decoded.userId})
             .then(async (user) => {
-            const validationError = validation.updateUserValidation(req.body)
-            if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
-            if(req.body.repeatPassword !== req.body.newPassword) return res.status(400).json({error: 'Passwords in both fields do not match'});
-            const salt = await bcrypt.genSalt(10);
-            if(!salt) return res.status(500).json({error: 'Server error'});
-            const newHashedPassword = await bcrypt.hash(req.body.newPassword, salt);
-            if(!newHashedPassword) return res.status(500).json({error: 'Server error'});
-            user.password = newHashedPassword;
-            try {
-                await user.save();
-                return res.status(200).json({message: 'Password change successful'});
-            } catch {
-                console.log(err);
-                return res.status(500).json({error: 'Server error'});
-            }
-        })
+                const validationError = validation.updateUserValidation(req.body)
+                if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
+                if(req.body.repeatPassword !== req.body.newPassword) return res.status(400).json({error: 'Passwords in both fields do not match'});
+                const salt = await bcrypt.genSalt(10);
+                if(!salt) return res.status(500).json({error: 'Server error'});
+                const newHashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+                if(!newHashedPassword) return res.status(500).json({error: 'Server error'});
+                user.password = newHashedPassword;
+                try {
+                    await user.save();
+                    return res.status(200).json({message: 'Password change successful'});
+                } catch {
+                    console.log(err);
+                    return res.status(500).json({error: 'Server error'});
+                }
+            })
         .catch(err => {
             console.log(err);
             return res.status(500).send('Server error');

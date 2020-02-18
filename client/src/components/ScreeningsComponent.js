@@ -17,16 +17,16 @@ const ScreeningsToRender = props =>{
         setTimeout(() => {setModalOpened(false)}, 270);  
     }
 
-    const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}) => {
+    const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}, index) => {
         
         let theDate = new Date(date);
-        let day = theDate.getDate();
+        let day = theDate.getUTCDate();
         let month = theDate.getMonth();
         let hours = theDate.getHours();
         let year = theDate.getFullYear();
         let minutes = theDate.getMinutes();
-        let dateToPass = {day: day, month: month, year: year, hours: hours, minutes: minutes};
-
+        let dateToPass = {day: day, month: month + 1, year: year, hours: hours, minutes: minutes};
+        
         return (
             <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screenings-element">
                 <div className="movie-image">

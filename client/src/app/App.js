@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from '../components/NavBar'
 import '../style/styles.css'
 import ScreeningsPage from '../pages/ScreeningsPage';
 import RegisterPage from '../pages/RegisterPage'
@@ -15,13 +14,11 @@ class App extends React.Component{
   render() {
   return(
     <Router>
-      <NavBar/>
       <Switch>
         <Route path="/" exact component={MainPage} />
         <Route path="/screenings" exact component={ScreeningsPage}/>
         <Route path="/registerpage" exact component={RegisterPage}/>
         <Route path="/loginpage" exact component={LoginPage}/>
-        <Route path="/logout" />
         <Route path="/profile" exact component={ProfilePage}/>
         <Route path="/myreservations" exact component={MyReservationsPage}/>
         <Route exact component={NotFoundPage} />

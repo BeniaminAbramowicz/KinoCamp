@@ -13,5 +13,6 @@ router.get('/loginpage');
 router.post('/createreservation', dataManager.saveBooking);
 router.post('/myreservations', dataManager.getUserReservations);
 router.put('/cancelreservation', dataManager.cancelReservation);
+router.get('/checksession', dataManager.checkSession);
 
 module.exports = router;

@@ -18,10 +18,15 @@ class ReservationWindow extends React.Component{
         await apis.createReservation(reservationData)
         .then(res => {
             alert(res.data.message);
-            this.props.history.push('/myreservations');
+            window.location.replace('/myreservations');
         })
         .catch(err => {
             if(err.response){
+                if(err.response.data.loginFlag === false){
+                    window.localStorage.setItem('auth', false);
+                    alert(err.response.data.error);
+                    window.location.replace('/loginpage');
+                }
                 console.log(err.response.data.error);
                 this.setState({errorMessage: err.response.data.error});
             }
@@ -47,7 +52,7 @@ class ReservationWindow extends React.Component{
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>{this.movie.ageRestriction}</td>
+                                    <td>Rating: {this.movie.ageRestriction}</td>
                                     <td>Genre: {this.movie.genre}</td>
                                     <td>Director: {this.movie.director}</td>
                                 </tr>

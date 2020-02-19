@@ -24,8 +24,8 @@ appRouting.use(session({
 
 db.on('error', console.error.bind(console, 'Database connection error: '));
 
-appRouting.get('/');
+appRouting.get('/screenings');
 appRouting.use('/api', routing);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 appRouting.listen(port, () => console.log('Express.js routing server is running on port ' + port));

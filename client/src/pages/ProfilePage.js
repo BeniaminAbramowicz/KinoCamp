@@ -43,7 +43,7 @@ class Profile extends React.Component{
         await apis.editPassword(editUserData)
         .then(res => {
             alert(res.data.message);
-            this.props.history.push('/profile');
+            window.location.replace('/profile');
         })
         .catch(err => {
             if(err.response){

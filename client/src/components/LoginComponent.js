@@ -26,8 +26,10 @@ class LoginForm extends React.Component{
     render(){
         return(
             <div className="login-form">
-                <h2>Login form</h2>
-                {this.props.errorMessage && <p id="register-form-error">{this.props.errorMessage}</p>}
+                <div className="form-header">
+                    <h2>Login form</h2>
+                    {this.props.errorMessage ? <div><p id="login-form-error">{this.props.errorMessage}</p></div> : null}
+                </div>
                 <form onSubmit={this.handleSubmit}>
                 <label>
                     Username:

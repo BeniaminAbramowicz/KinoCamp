@@ -65,12 +65,18 @@ class ReservationWindow extends React.Component{
                 {window.localStorage.getItem('auth') === 'true' ?
                 <div>
                     <div id="reservation-legend">
-                        <span>Free seats</span>
-                        <div></div>
-                        <span>Reserved seats</span>
-                        <div></div>
-                        <span>Seats to be reserved by You</span>
-                        <div></div>
+                        <div className="reservation-legend-element">
+                            <span>Free seats</span>
+                            <div id="legend-free-seat"></div>
+                        </div>
+                        <div className="reservation-legend-element">
+                            <span>Reserved seats</span>
+                            <div id="legend-reserved-seat"></div>
+                        </div>
+                        <div className="reservation-legend-element">
+                            <span>Seats to be reserved by You</span>
+                            <div id="legend-user-seat"></div>
+                        </div>
                     </div>
                     <hr></hr>
                     {this.state.errorMessage && <p>{this.state.errorMessage}</p>}

@@ -41,8 +41,10 @@ class RegisterForm extends React.Component{
     render(){
         return(
             <div className="register-form">
-                <h2>Register form</h2>
-                {this.props.errorMessage && <p id="register-form-error">{this.props.errorMessage}</p>}
+                <div className="form-header">
+                    <h2>Register form</h2>
+                    {this.props.errorMessage ? <div><p id="register-form-error">{this.props.errorMessage}</p></div> : null}
+                </div>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Username <span className="form-requirement">(Must be at least 6 characters long)</span>:

@@ -148,8 +148,9 @@ async function saveBooking(req, res){
                     qrcode: uniqueCode
                 });
                 let userForEmail = '';
+                let test= '';
                 try {
-                    await booking.save();
+                    test = await booking.save();
                     userForEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
                 } catch(err) {
                     console.log(err);
@@ -177,7 +178,7 @@ async function saveBooking(req, res){
                     await transporter.sendMail({
                         from: nodemailerEmail,
                         to: userForEmail.email,
-                        subject: "Reservation number " + res._id,
+                        subject: "Reservation number " + test._id,
                         html: `<h2>Movie: ${screening.movie.title}</h2>
                         <h4>Date: ${screening.date}</h4> 
                         <h4>Ticket(s) total price: ${finalPrice}</h4>
@@ -376,15 +377,6 @@ async function updatePassword(req, res){
     } 
 }
 
-async function checkSession(req, res){
-    let loginFlag = '';
-    if(!req.session.token){
-        loginFlag = false;
-        return res.status(200).json({loginFlag: loginFlag});
-    }
-}
-
-exports.checkSession = checkSession;
 exports.cancelReservation = cancelReservation;
 exports.getUserReservations = getUserReservations;
 exports.getUserById = getUserById;

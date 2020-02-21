@@ -147,11 +147,11 @@ async function saveBooking(req, res){
                     seats: req.body.bookedSeats,
                     qrcode: uniqueCode
                 });
-                let userForEmail = '';
-                let test= '';
+                let recipientEmail = '';
+                let createdReservation= '';
                 try {
-                    test = await booking.save();
-                    userForEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
+                    createdReservation = await booking.save();
+                    recipientEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
                 } catch(err) {
                     console.log(err);
                     return res.status(500).json({error: 'Server error'});
@@ -177,8 +177,8 @@ async function saveBooking(req, res){
         
                     await transporter.sendMail({
                         from: nodemailerEmail,
-                        to: userForEmail.email,
-                        subject: "Reservation number " + test._id,
+                        to: recipientEmail.email,
+                        subject: "Reservation number " + createdReservation._id,
                         html: `<h2>Movie: ${screening.movie.title}</h2>
                         <h4>Date: ${screening.date}</h4> 
                         <h4>Ticket(s) total price: ${finalPrice}</h4>

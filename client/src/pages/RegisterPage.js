@@ -42,7 +42,7 @@ class RegisterPage extends React.Component{
         return(
             <div>
                 <NavBar ref={this.navBarElement}/>
-                <div className="register-form-container">
+                <div className="form-container">
                     <RegisterComponent errorMessage={this.state.errorMessage} onSubmit={this.handleSubmit} />
                 </div>
             </div>

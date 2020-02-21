@@ -13,13 +13,7 @@
 /* Media queries (RWB) */
 
 @media screen and (max-width: 600px){
-    div.register-form{
-        margin: 0;
-        width: 100%;
-        min-width: 18.75rem;
-    }
-
-    div.login-form{
+    div.form-style{
         margin: 0;
         width: 100%;
         min-width: 18.75rem;
@@ -196,10 +190,6 @@ hr{
     opacity: 0;
 }
 
-.reservation-element-transform{
-    opacity: 0;
-}
-
 .reservation-element > div:nth-child(2){
     width: 100%;
     height: auto;
@@ -344,9 +334,9 @@ hr{
     margin-top: 1rem;
 }
 
-/* Register main container and it's elements*/
+/* Register/Login main container and it's elements*/
 
-.register-form-container{
+.form-container{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -355,11 +345,11 @@ hr{
     padding: 1rem;
 }
 
-.register-form{
+.form-style{
     display: flex;
     flex-direction: column;
     position: relative;
-    top: -10rem;
+    top: -8rem;
     width: 40%;
     min-width: 18.75;
     height: auto;
@@ -383,7 +373,7 @@ hr{
     font-size: 1rem;
 }
 
-.register-form label{
+.form-style label{
     width: 100%;
 }
 
@@ -391,51 +381,7 @@ hr{
     color: rgb(255, 215, 36);
 }
 
-.register-form input{
-    width: 100%;
-    border-radius: 5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    outline: none;
-}
-
-#register-form-error{
-    color: red;
-    font-size: 1rem;
-}
-
-
-/* Login container and it's elements*/
-
-.login-form-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    height: 100vh;
-    padding: 1rem;
-}
-
-.login-form{
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    height: auto;
-    position: relative;
-    top: -10rem;
-    margin: 1rem auto;
-    color: white;
-    background-color: rgb(53, 68, 64);
-    border-style: solid;
-    border-color: rgb(187, 112, 0);
-    padding: 1rem;
-}
-
-.login-form label{
-    width: 100%;
-}
-
-.login-form input{
+.form-style input{
     width: 100%;
     border-radius: 5rem;
     padding-left: 0.5rem;

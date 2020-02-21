@@ -42,7 +42,7 @@ class LoginPage extends React.Component{
         return (
             <div>
                 <NavBar ref={this.navBarElement}/>
-                <div className="login-form-container">
+                <div className="form-container">
                     <LoginComponent errorMessage={this.state.errorMessage} onSubmit={this.handleSubmit}></LoginComponent>
                 </div>
             </div>

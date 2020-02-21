@@ -40,10 +40,10 @@ class RegisterForm extends React.Component{
 
     render(){
         return(
-            <div className="register-form">
+            <div className="form-style">
                 <div className="form-header">
                     <h2>Register form</h2>
-                    {this.props.errorMessage ? <div><p id="register-form-error">{this.props.errorMessage}</p></div> : null}
+                    {this.props.errorMessage ? <div><p>{this.props.errorMessage}</p></div> : null}
                 </div>
                 <form onSubmit={this.handleSubmit}>
                     <label>

@@ -24,7 +24,6 @@ appRouting.use(session({
 
 db.on('error', console.error.bind(console, 'Database connection error: '));
 
-appRouting.get('/screenings');
 appRouting.use('/api', routing);
 
 const port = process.env.PORT || 3001;

@@ -11,22 +11,22 @@ class Rows extends React.Component{
         this.reserveSeat = this.reserveSeat.bind(this);
         this.state = {numberOfSeats: 0};
     }
-
+    
     reserveSeat(st, event, row){
         if(event.target.className === "user-reserved-seat" && this.seatsToReserve.find(x => x.row === row && x.seat === st)){
             event.target.className = "free-seat";
-            const helperArray = this.seatsToReserve; 
+            let helperArray = this.seatsToReserve; 
             helperArray.splice(helperArray.findIndex(x => x.row === row && x.seat === st), 1);
             this.seatsToReserve = helperArray;
             let currentSeats = this.state.numberOfSeats;
             currentSeats--;
             this.setState({numberOfSeats: currentSeats});
-        } else if(event.target.className === "reserved-seat" && this.rows[row][st]){
+        } else if(event.target.className === "reserved-seat" && this.rows[row-1][st-1]){
 
         } else {
             event.target.className = "user-reserved-seat";
-            const helperArray = this.seatsToReserve;
-            const helperArray2 = helperArray.concat({row: row, seat: st})
+            let helperArray = this.seatsToReserve;
+            let helperArray2 = helperArray.concat({row: row, seat: st});
             this.seatsToReserve = helperArray2;
             let currentSeats = this.state.numberOfSeats;
             currentSeats++;

@@ -54,33 +54,40 @@ const Movie = mongoose.model('Movie', new mongoose.Schema({
 }));
 
 const User = mongoose.model('User', new mongoose.Schema({
-    username:{
+    username: {
         type: String,
         required: true,
         minlength: 6,
         maxlength: 20,
         unique: true
     },
-    name:{
+    username_lower: {
+        type: String,
+        required: true,
+        minlength: 6,
+        maxlength: 20,
+        unique: true
+    },
+    name: {
         type: String,
         required: true,
         minlength: 2,
         maxlength: 100
     },
-    surname:{
+    surname: {
         type: String,
         required: true,
         minlength: 2,
         maxlength: 100
     },
-    email:{
+    email: {
         type: String,
         required: true,
         minlength: 7,
         maxlength: 100,
         unique: true
     },
-    password:{
+    password: {
         type: String,
         required: true,
         minlength: 6,

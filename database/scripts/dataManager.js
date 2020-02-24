@@ -72,7 +72,7 @@ async function getUserById(req, res){
         jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
-                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window', loginFlag: false});
             }
             await Model.User.findOne({_id: decoded.userId})
             .select({username: 1, email: 1, name: 1, surname: 1})
@@ -85,19 +85,23 @@ async function getUserById(req, res){
             });
         }); 
     } else {
-        return res.status(401).json({error: 'You must be logged in to view profile'});
+        return res.status(401).json({error: 'You must be logged in to view profile', loginFlag: false});
     } 
 }
 
 async function getScreenings(req, res){
+    let loginFlag = '';
+    if(!req.session.token){
+        loginFlag = false;
+    }
     const dateNow = new Date().toISOString().split('T')[0];
-    const dateMonthAfter = new Date(new Date().setDate(new Date().getDate()+10)).toISOString().split('T')[0];
-    await Model.Screening.find({date: {$gte: dateNow, $lt: dateMonthAfter}}).populate('movie')
+    const tenDaysAfter = new Date(new Date().setDate(new Date().getDate()+10)).toISOString().split('T')[0];
+    await Model.Screening.find({date: {$gte: dateNow, $lt: tenDaysAfter}}).populate('movie')
     .then(screeningsList => {
-        return res.status(200).json(screeningsList);
+        return res.status(200).json({screeningsList: screeningsList, loginFlag: loginFlag});
     }).catch(err => {
         console.log(err);
-        return res.status(500).json({error: 'There was an error when attempting to get data from the server'});
+        return res.status(500).json({error: 'There was an error when attempting to get data from the server', loginFlag: loginFlag});
     });
 }
 
@@ -105,7 +109,7 @@ async function saveBooking(req, res){
     if(req.session.token){
         jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
-                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window', loginFlag: false});
             }
             if(req.body.amountOfSeats === 0 || req.body.bookedSeats.length === 0){
                 return res.status(400).json({error: 'You have to reserve at least one seat'});
@@ -114,15 +118,26 @@ async function saveBooking(req, res){
             .then(async (screening) => {
                 let finalPrice = 0;
                 if(req.body.amountOfSeats !== req.body.bookedSeats.length){
-                    finalPrice = req.body.bookedSeats.length * screeningData.cinemaHall.priceForSeats;
+                    finalPrice = req.body.bookedSeats.length * screening.cinemaHall.priceForSeats;
                 } else {
                     finalPrice = req.body.totalPrice;
                 }
                 for(var i = 0; i < req.body.bookedSeats.length; i++){
                     if(screening.cinemaHall.seats[req.body.bookedSeats[i].row - 1][req.body.bookedSeats[i].seat - 1]){
-                        return res.status(400).json({error: 'Seats are already reserved'});
+                        return res.status(400).json({error: 'One or more of seats you\'ve choosen has been already reserved'});
                     }
                 }
+                for(var i = 0; i < req.body.bookedSeats.length; i++){
+                    screening.cinemaHall.seats[req.body.bookedSeats[i].row - 1][req.body.bookedSeats[i].seat - 1] = true;
+                }
+                screening.cinemaHall.markModified('seats');
+
+                try {
+                    await screening.save();
+                } catch(err) {
+                    return res.status(500).json({error: 'Server error'});
+                }                
+
                 const uniqueCode = new Date().valueOf().toString(36) + Math.random().toString(36).substr(2);
                 
                 const booking = new Model.Booking({
@@ -132,10 +147,11 @@ async function saveBooking(req, res){
                     seats: req.body.bookedSeats,
                     qrcode: uniqueCode
                 });
-                let userForEmail = '';
+                let recipientEmail = '';
+                let createdReservation= '';
                 try {
-                    await booking.save();
-                    userForEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
+                    createdReservation = await booking.save();
+                    recipientEmail = await Model.User.findOne({_id: decoded.userId}).select({email: 1});
                 } catch(err) {
                     console.log(err);
                     return res.status(500).json({error: 'Server error'});
@@ -161,8 +177,8 @@ async function saveBooking(req, res){
         
                     await transporter.sendMail({
                         from: nodemailerEmail,
-                        to: userForEmail.email,
-                        subject: "Reservation number " + res._id,
+                        to: recipientEmail.email,
+                        subject: "Reservation number " + createdReservation._id,
                         html: `<h2>Movie: ${screening.movie.title}</h2>
                         <h4>Date: ${screening.date}</h4> 
                         <h4>Ticket(s) total price: ${finalPrice}</h4>
@@ -182,7 +198,7 @@ async function saveBooking(req, res){
             })
         });
     } else {
-        return res.status(401).json({error: 'You must be logged in to make a reservation'});
+        return res.status(401).json({error: 'You must be logged in to make a reservation', loginFlag: false});
     }
 }
 
@@ -191,7 +207,7 @@ async function getUserReservations(req, res){
         jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
-                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window', loginFlag: false});
             }
             await Model.Booking.find({user: decoded.userId}).populate([
                 {
@@ -207,7 +223,7 @@ async function getUserReservations(req, res){
             ])
             .then(reservationsList => {
                 let updatedList = reservationsList.map(reservation => {
-                    if(reservation.screening.date.getTime() < new Date().addHours(1).addMinutes(30).getTime()){
+                    if(reservation.screening.date < new Date().addHours(1).addMinutes(30)){
                         reservation.status = 'archived';
                         try {
                             async () => {
@@ -222,14 +238,14 @@ async function getUserReservations(req, res){
                         return reservation;
                     }
                 })
-                return res.status(200).json(updatedList);
+                return res.status(200).json({reservationsList: updatedList});
             }).catch(err => {
                 console.log(err);
                 return res.status(500).json({error: 'There was an error when attempting to get data from the server'});
             });
         });   
     } else {
-        return res.status(401).json({error: 'You must be logged in to see reservations'});
+        return res.status(401).json({error: 'You must be logged in to see reservations', loginFlag: false});
     }
 }
 
@@ -238,11 +254,11 @@ async function cancelReservation(req, res){
         jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
                 console.log(err);
-                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window', loginFlag: false});
             }
             await Model.Booking.findOne({_id: req.body.reservationId, user: decoded.userId}).populate('screening')
             .then(async (reservation) => {
-                if(reservation.screening.date.getTime() - new Date().addHours(1).getTime() <= 1800000){
+                if(reservation.screening.date - new Date().addHours(1) <= 1800000){
                     return res.status(400).json({error: 'You can\'t cancel reservation less than 30 minutes before screening'});
                 }
                 reservation.status = 'cancelled';
@@ -260,7 +276,7 @@ async function cancelReservation(req, res){
             });
         })
     } else {
-        return res.status(401).json({error: 'You must be logged in to cancel reservation'});
+        return res.status(401).json({error: 'You must be logged in to cancel reservation', loginFlag: false});
     }
     
 }
@@ -282,6 +298,7 @@ async function saveUser(req, res){
 
     const user = new Model.User({
         username: req.body.username,
+        username_lower: req.body.username.toLowerCase(),
         email: req.body.email,
         name: req.body.name,
         surname: req.body.surname,
@@ -300,7 +317,7 @@ async function saveUser(req, res){
 }
 
 async function loginUser(req, res){
-    await Model.User.findOne({username: req.body.username})
+    await Model.User.findOne({username_lower: req.body.username.toLowerCase()})
     .then(async (user) => {
         if(!user) return res.status(400).json({error: 'Username or password incorrect'});
         await bcrypt.compare(req.body.password, user.password)
@@ -330,33 +347,33 @@ async function updatePassword(req, res){
     if(req.session.token){
         jwt.verify(req.session.token, hashSecret, async function(err, decoded){
             if(err) {
-                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window'});
+                return res.status(401).json({error: 'Your session has expired. You will be redirected to login window', loginFlag: false});
             }
             await Model.User.findOne({_id: decoded.userId})
             .then(async (user) => {
-            const validationError = validation.updateUserValidation(req.body)
-            if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
-            if(req.body.repeatPassword !== req.body.newPassword) return res.status(400).json({error: 'Passwords in both fields do not match'});
-            const salt = await bcrypt.genSalt(10);
-            if(!salt) return res.status(500).json({error: 'Server error'});
-            const newHashedPassword = await bcrypt.hash(req.body.newPassword, salt);
-            if(!newHashedPassword) return res.status(500).json({error: 'Server error'});
-            user.password = newHashedPassword;
-            try {
-                await user.save();
-                return res.status(200).json({message: 'Password change successful'});
-            } catch {
-                console.log(err);
-                return res.status(500).json({error: 'Server error'});
-            }
-        })
+                const validationError = validation.updateUserValidation(req.body)
+                if(validationError.hasOwnProperty("error")) return res.status(400).json({error: validationError.error.message});
+                if(req.body.repeatPassword !== req.body.newPassword) return res.status(400).json({error: 'Passwords in both fields do not match'});
+                const salt = await bcrypt.genSalt(10);
+                if(!salt) return res.status(500).json({error: 'Server error'});
+                const newHashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+                if(!newHashedPassword) return res.status(500).json({error: 'Server error'});
+                user.password = newHashedPassword;
+                try {
+                    await user.save();
+                    return res.status(200).json({message: 'Password change successful'});
+                } catch {
+                    console.log(err);
+                    return res.status(500).json({error: 'Server error'});
+                }
+            })
         .catch(err => {
             console.log(err);
             return res.status(500).send('Server error');
         });
         });
     } else {
-        return res.status(401).json({error: 'You must be logged in to update password'});
+        return res.status(401).json({error: 'You must be logged in to update password', loginFlag: false});
     } 
 }
 

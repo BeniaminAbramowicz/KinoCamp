@@ -17,26 +17,26 @@ const ScreeningsToRender = props =>{
         setTimeout(() => {setModalOpened(false)}, 270);  
     }
 
-    const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}) => {
+    const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}, index) => {
         
         let theDate = new Date(date);
-        let day = theDate.getDate();
+        let day = theDate.getUTCDate();
         let month = theDate.getMonth();
         let hours = theDate.getHours();
         let year = theDate.getFullYear();
         let minutes = theDate.getMinutes();
-        let dateToPass = {day: day, month: month, year: year, hours: hours, minutes: minutes};
-
+        let dateToPass = {day: day, month: month + 1, year: year, hours: hours, minutes: minutes};
+        
         return (
             <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screenings-element">
                 <div className="movie-image">
-                    <img src={require(`../images/${movie.picture}`)} width="100%" height="auto" alt="spiderman-poster"/>
+                    <img src={require(`../images/${movie.picture}`)} alt="movie-poster"/>
                 </div>
                 <div className="screening-info">
                     <h2>{movie.title}</h2>
                     <hr></hr>
-                    <h6>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month + 1}` : month + 1}.{year}</h6>
-                    <h6>Time: {hours < 10 && hours !==0 ? `0${hours - 1}` : hours === 0 ? '23' : hours - 1}:{minutes < 10 ? `0${minutes}` : minutes}</h6>
+                    <h5>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month + 1}` : month + 1}.{year}</h5>
+                    <h5>Time: {hours < 10 && hours !==0 ? `0${hours - 1}` : hours === 0 ? '23' : hours - 1}:{minutes < 10 ? `0${minutes}` : minutes}</h5>
                 </div>
             </div>
         );

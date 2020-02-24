@@ -38,8 +38,10 @@ class ProfileData extends React.Component{
             </div>
             <hr />
             <div className="edit-data-form">
-                <h5>Change password form </h5>
-                {this.props.errorMessage && <p id="edit-data-form-error">{this.props.errorMessage}</p>}
+                <div className='form-header'>
+                    <h5>Change password form </h5>
+                    {this.props.errorMessage ? <div><p id="edit-data-form-error">{this.props.errorMessage}</p></div> : null}
+                </div>
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         New password <span className="form-requirement">(Must be at least 6 characters long, contain at least one big letter, one small letter and a number)</span>:

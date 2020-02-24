@@ -6,7 +6,6 @@ const db = require('./databasecfg');
 const routing = require('./routing');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const bcrypt = require('bcrypt');
 
 appRouting.use(bodyParser.urlencoded({extended: true}));
 appRouting.use(bodyParser.json());
@@ -25,8 +24,7 @@ appRouting.use(session({
 
 db.on('error', console.error.bind(console, 'Database connection error: '));
 
-appRouting.get('/');
 appRouting.use('/api', routing);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 appRouting.listen(port, () => console.log('Express.js routing server is running on port ' + port));

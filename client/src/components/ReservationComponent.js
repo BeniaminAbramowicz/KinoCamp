@@ -14,14 +14,20 @@ class ReservationWindow extends React.Component{
     }
 
     createReservation = async (totalPrice, reservedSeats, amountOfSeats) => {
+        console.log(reservedSeats);
         const reservationData = {screening: this.id, totalPrice: totalPrice, bookedSeats: reservedSeats, amountOfSeats: amountOfSeats};
         await apis.createReservation(reservationData)
         .then(res => {
             alert(res.data.message);
-            this.props.history.push('/myreservations');
+            window.location.replace('/myreservations');
         })
         .catch(err => {
             if(err.response){
+                if(err.response.data.loginFlag === false){
+                    window.localStorage.setItem('auth', false);
+                    alert(err.response.data.error);
+                    window.location.replace('/loginpage');
+                }
                 console.log(err.response.data.error);
                 this.setState({errorMessage: err.response.data.error});
             }
@@ -31,9 +37,10 @@ class ReservationWindow extends React.Component{
     render(){
         return (
             <div className="reservation-element">
-                <div id="close-button" onClick={this.props.closeDetails} className="close-reservation">X</div><span className="close-text">Close reservation window</span>
+                <div id="movie-title">
+                    <h2>{this.movie.title}</h2><div onClick={this.props.closeDetails} className="close-reservation">X</div>
+                </div>
                 <div>
-                    <h2>{this.movie.title}</h2>
                     <hr></hr>
                     <div id="main-info">
                         <h6>Date: {this.date.day < 10 ? `0${this.date.day}` : this.date.day}.{this.date.month < 10 ? `0${this.date.month}` : this.date.month}.{this.date.year}</h6>
@@ -46,7 +53,7 @@ class ReservationWindow extends React.Component{
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>{this.movie.ageRestriction}</td>
+                                    <td>Rating: {this.movie.ageRestriction}</td>
                                     <td>Genre: {this.movie.genre}</td>
                                     <td>Director: {this.movie.director}</td>
                                 </tr>
@@ -58,12 +65,18 @@ class ReservationWindow extends React.Component{
                 {window.localStorage.getItem('auth') === 'true' ?
                 <div>
                     <div id="reservation-legend">
-                        <span>Free seats</span>
-                        <div></div>
-                        <span>Reserved seats</span>
-                        <div></div>
-                        <span>Seats to be reserved by You</span>
-                        <div></div>
+                        <div className="reservation-legend-element">
+                            <span>Free seats</span>
+                            <div id="legend-free-seat"></div>
+                        </div>
+                        <div className="reservation-legend-element">
+                            <span>Reserved seats</span>
+                            <div id="legend-reserved-seat"></div>
+                        </div>
+                        <div className="reservation-legend-element">
+                            <span>Seats to be reserved by You</span>
+                            <div id="legend-user-seat"></div>
+                        </div>
                     </div>
                     <hr></hr>
                     {this.state.errorMessage && <p>{this.state.errorMessage}</p>}

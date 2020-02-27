@@ -18,7 +18,7 @@ const ScreeningsToRender = props =>{
     }
 
     const scrs = props.screeningsList.map(({_id, date, cinemaHall, movie}, index) => {
-        
+        let screeningsOnDay = '';
         let theDate = new Date(date);
         let day = theDate.getUTCDate();
         let month = theDate.getMonth();
@@ -26,8 +26,8 @@ const ScreeningsToRender = props =>{
         let year = theDate.getFullYear();
         let minutes = theDate.getMinutes();
         let dateToPass = {day: day, month: month + 1, year: year, hours: hours, minutes: minutes};
-        
-        return (
+        if(day === parseInt(props.passedDate[0]) && month === props.passedDate[1] && year === new Date().getFullYear()){
+        screeningsOnDay =
             <div key={_id} onClick={() => openDetails(_id, dateToPass, cinemaHall, movie)} className="screenings-element">
                 <div className="movie-image">
                     <img src={require(`../images/${movie.picture}`)} alt="movie-poster"/>
@@ -38,8 +38,9 @@ const ScreeningsToRender = props =>{
                     <h5>Date: {day < 10 ? `0${day}` : day}.{month < 10 ? `0${month + 1}` : month + 1}.{year}</h5>
                     <h5>Time: {hours < 10 && hours !==0 ? `0${hours - 1}` : hours === 0 ? '23' : hours - 1}:{minutes < 10 ? `0${minutes}` : minutes}</h5>
                 </div>
-            </div>
-        );
+            </div>;
+        }
+        return screeningsOnDay;
     });
     return <div className="screenings-container">{scrs}{modalOpened ? <ReservationComponent chosenReservation={chosenScreening} closeDetails={closeDetails} /> : null}</div>
 }

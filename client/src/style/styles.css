@@ -99,6 +99,37 @@ hr{
 }
 
 /* Screenings main container and it's elements */
+#pages{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1rem;
+    color: white;
+    min-width: 25rem;
+    margin: 1rem 1rem;
+    border-radius: 5rem;
+    background-color: rgb(53, 68, 64);
+    justify-content: center;
+}
+
+#pages p{
+    margin-bottom: 0;
+}
+
+.date-button{
+    border: solid 0.3rem;
+    border-radius: 5rem;
+    border-color: white;
+    text-align: center;
+    padding: 0.5rem;
+    margin: 0.3rem;
+}
+
+.date-button:hover{
+    cursor: pointer;
+    border-color: rgb(0, 196, 0);
+    color: rgb(0, 196, 0);
+}
 
 .screenings-container{
     display: grid;
@@ -117,6 +148,11 @@ hr{
     border-style: solid;
     border-color: rgb(187, 112, 0);
     border-width: 0.7rem;
+}
+
+.screenings-element:hover{
+    border-radius: 1rem;
+    border-color: rgb(0, 196, 0);
 }
 
 .movie-image > img{
